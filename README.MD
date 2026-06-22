@@ -1,4 +1,8 @@
+LucasMacielMachado
+Lucca Bibiano Garcia 
+
 # Análise Semântica (MiniJava)
+
 
 Este repositório contém uma implementação de análise semântica para a linguagem MiniJava, feita em uma única passada. Para simplificar, suporte a arrays foi omitido conforme o enunciado do trabalho.
 
