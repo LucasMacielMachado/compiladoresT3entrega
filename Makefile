@@ -2,9 +2,9 @@
 # byacc/j from http://troi.lincom-asg.com/~rjamison/byacc/
 
 #JFLEX  = java -jar jflex.jar
-#BYACCJ = ./yacc.linux -tv -J
+BYACCJ = ./yacc.linux -tv -J
 JFLEX = jflex
-BYACCJ = byaccj -tv -J
+#BYACCJ = byaccj -tv -J
 JAVAC  = javac
 
 # targets:
@@ -30,22 +30,30 @@ Parser.java: miniJava.y Yylex.java
 
 test: all
 	@echo "\n=============================================="
-	@echo "[1/5] TESTANDO SUCESSO BÁSICO"
+	@echo "   1. TESTANDO ESCOPO"
 	@echo "=============================================="
-	@java Parser p1_sucesso.mjava
+	@echo "[SUCESSO]"
+	@java Parser teste_escopo_sucesso.mjava
+	@echo "\n[ERRO]"
+	@java Parser teste_escopo_erro.mjava
 	@echo "\n=============================================="
-	@echo "[2/5] TESTANDO SUCESSO - POLIMORFISMO"
+	@echo "   2. TESTANDO TIPOS"
 	@echo "=============================================="
-	@java Parser sucesso_polimorfismo.mjava
+	@echo "[SUCESSO]"
+	@java Parser teste_tipo_sucesso.mjava
+	@echo "\n[ERRO]"
+	@java Parser teste_tipo_erro.mjava
 	@echo "\n=============================================="
-	@echo "[3/5] TESTANDO ERRO - ESCOPO FECHADO"
+	@echo "   3. TESTANDO DECLARAÇÃO PRÉVIA"
 	@echo "=============================================="
-	@java Parser p1_erro_escopo.mjava
+	@echo "[SUCESSO]"
+	@java Parser teste_declaracao_sucesso.mjava
+	@echo "\n[ERRO]"
+	@java Parser teste_declaracao_erro.mjava
 	@echo "\n=============================================="
-	@echo "[4/5] TESTANDO ERRO - TIPOS INCOMPATÍVEIS"
+	@echo "   4. TESTANDO POLIMORFISMO"
 	@echo "=============================================="
-	@java Parser p1_erro_tipo.mjava
-	@echo "\n=============================================="
-	@echo "[5/5] TESTANDO ERRO - DECLARAÇÃO PRÉVIA"
-	@echo "=============================================="
-	@java Parser p1_erro_declaracao.mjava
+	@echo "[SUCESSO]"
+	@java Parser teste_polimorfismo_sucesso.mjava
+	@echo "\n[ERRO]"
+	@java Parser teste_polimorfismo_erro.mjava

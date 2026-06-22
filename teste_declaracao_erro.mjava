@@ -1,0 +1,17 @@
+class Manutencao {
+    public int trocarFiltro() {
+        int status;
+        status = this.drenarOleo(); // ERRO ESPERADO: Metodo drenarOleo ainda nao existe na Tabela de Simbolos
+        return status;
+    }
+
+    public int drenarOleo() {
+        return 1;
+    }
+}
+
+class App {
+    public static void main(String[] args) {
+        System.out.println(new Manutencao().trocarFiltro());
+    }
+}

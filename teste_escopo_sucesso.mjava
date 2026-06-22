@@ -1,0 +1,20 @@
+class Oficina {
+    int ferramentas;
+
+    public int organizar(int qtd) {
+        ferramentas = qtd;
+        return ferramentas;
+    }
+
+    public int pegarChave() {
+        int chave;
+        chave = 10;
+        return chave;
+    }
+}
+
+class App {
+    public static void main(String[] args) {
+        System.out.println(new Oficina().pegarChave());
+    }
+}

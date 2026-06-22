@@ -12,12 +12,6 @@ class Cachorro extends Animal {
 
 class App {
     public static void main(String[] args) {
-        {
-            Animal a;
-            int x;
-            a = new Cachorro();
-            x = a.fazerBarulho();
-            System.out.println(x);
-        }
+        System.out.println(new Cachorro().fazerBarulho());
     }
 }

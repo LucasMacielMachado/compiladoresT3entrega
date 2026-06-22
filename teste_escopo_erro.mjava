@@ -1,0 +1,20 @@
+class Oficina {
+    int ferramentas;
+
+    public int limpar() {
+        int chave;
+        chave = 10;
+        return chave;
+    }
+
+    public int consertar() {
+        chave = 12; // ERRO ESPERADO: Tentativa de acessar variavel local de outro metodo
+        return ferramentas;
+    }
+}
+
+class App {
+    public static void main(String[] args) {
+        System.out.println(new Oficina().consertar());
+    }
+}

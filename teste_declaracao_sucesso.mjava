@@ -1,0 +1,17 @@
+class Manutencao {
+    public int drenarOleo() {
+        return 1;
+    }
+
+    public int trocarFiltro() {
+        int status;
+        status = this.drenarOleo(); 
+        return status;
+    }
+}
+
+class App {
+    public static void main(String[] args) {
+        System.out.println(new Manutencao().trocarFiltro());
+    }
+}

@@ -13,81 +13,85 @@
 
    7  ClassDeclaration : CLASS Identifier $$2 '{' VarDeclarationList MethodDeclarationList '}'
 
-   8  MethodDeclarationList : MethodDeclarationList MethodDeclaration
-   9                        |
+   8  $$3 :
 
-  10  $$3 :
+   9  ClassDeclaration : CLASS Identifier EXTENDS Identifier $$3 '{' VarDeclarationList MethodDeclarationList '}'
 
-  11  MethodDeclaration : PUBLIC Type Identifier $$3 '(' ParamList ')' '{' DeclOrStatList RETURN Exp ';' '}'
+  10  MethodDeclarationList : MethodDeclarationList MethodDeclaration
+  11                        |
 
-  12  VarDeclarationList : VarDeclarationList VarDeclaration
-  13                     |
+  12  $$4 :
 
-  14  VarDeclaration : Type Identifier ';'
+  13  MethodDeclaration : PUBLIC Type Identifier $$4 '(' ParamList ')' '{' DeclOrStatList RETURN Exp ';' '}'
 
-  15  $$4 :
+  14  VarDeclarationList : VarDeclarationList VarDeclaration
+  15                     |
 
-  16  DeclOrStatList : Identifier Identifier ';' $$4 DeclOrStatList
+  16  VarDeclaration : Type Identifier ';'
 
   17  $$5 :
 
-  18  DeclOrStatList : BaseType Identifier ';' $$5 DeclOrStatList
+  18  DeclOrStatList : Identifier Identifier ';' $$5 DeclOrStatList
 
   19  $$6 :
 
-  20  DeclOrStatList : Identifier '=' Exp ';' $$6 StatementList
-  21                 | '{' StatementList '}'
-  22                 | IF '(' Exp ')' Statement ELSE Statement StatementList
-  23                 | WHILE '(' Exp ')' Statement StatementList
-  24                 | SOUT '(' Exp ')' ';' StatementList
-  25                 |
+  20  DeclOrStatList : BaseType Identifier ';' $$6 DeclOrStatList
 
-  26  $$7 :
+  21  $$7 :
 
-  27  ParamList : Type Identifier $$7 ParamListAux
-  28            |
+  22  DeclOrStatList : Identifier '=' Exp ';' $$7 StatementList
+  23                 | '{' StatementList '}'
+  24                 | IF '(' Exp ')' Statement ELSE Statement StatementList
+  25                 | WHILE '(' Exp ')' Statement StatementList
+  26                 | SOUT '(' Exp ')' ';' StatementList
+  27                 |
 
-  29  $$8 :
+  28  $$8 :
 
-  30  ParamListAux : ',' Type Identifier $$8 ParamListAux
-  31               |
+  29  ParamList : Type Identifier $$8 ParamListAux
+  30            |
 
-  32  BaseType : BOOLEAN
-  33           | INT
+  31  $$9 :
 
-  34  Type : BaseType
-  35       | Identifier
+  32  ParamListAux : ',' Type Identifier $$9 ParamListAux
+  33               |
 
-  36  Statement : '{' StatementList '}'
-  37            | IF '(' Exp ')' Statement ELSE Statement
-  38            | WHILE '(' Exp ')' Statement
-  39            | SOUT '(' Exp ')' ';'
-  40            | Identifier '=' Exp ';'
+  34  BaseType : BOOLEAN
+  35           | INT
 
-  41  StatementList : StatementList Statement
-  42                |
+  36  Type : BaseType
+  37       | Identifier
 
-  43  Exp : Exp AND Exp
-  44      | Exp '<' Exp
-  45      | Exp '+' Exp
-  46      | Exp '-' Exp
-  47      | Exp '*' Exp
-  48      | Exp '/' Exp
-  49      | Exp '.' Identifier '(' RealParamList ')'
-  50      | Number
-  51      | TRUE
-  52      | FALSE
-  53      | Identifier
-  54      | THIS
-  55      | NEW Identifier '(' ')'
-  56      | '!' Exp
-  57      | '(' Exp ')'
+  38  Statement : '{' StatementList '}'
+  39            | IF '(' Exp ')' Statement ELSE Statement
+  40            | WHILE '(' Exp ')' Statement
+  41            | SOUT '(' Exp ')' ';'
+  42            | Identifier '=' Exp ';'
 
-  58  RealParamList : Exp RealParamListAux
-  59                |
+  43  StatementList : StatementList Statement
+  44                |
 
-  60  RealParamListAux : ',' Exp RealParamListAux
-  61                   |
+  45  Exp : Exp AND Exp
+  46      | Exp '<' Exp
+  47      | Exp '+' Exp
+  48      | Exp '-' Exp
+  49      | Exp '*' Exp
+  50      | Exp '/' Exp
+  51      | Exp '.' Identifier '(' RealParamList ')'
+  52      | Number
+  53      | TRUE
+  54      | FALSE
+  55      | Identifier
+  56      | THIS
+  57      | NEW Identifier '(' ')'
+  58      | '!' Exp
+  59      | '(' Exp ')'
+
+  60  RealParamList : Exp RealParamListAux
+  61                |
+
+  62  RealParamListAux : ',' Exp RealParamListAux
+  63                   |
 
 state 0
 	$accept : . Program $end  (0)
@@ -119,6 +123,7 @@ state 2
 
 state 3
 	ClassDeclaration : CLASS . Identifier $$2 '{' VarDeclarationList MethodDeclarationList '}'  (7)
+	ClassDeclaration : CLASS . Identifier EXTENDS Identifier $$3 '{' VarDeclarationList MethodDeclarationList '}'  (9)
 
 	Identifier  shift 7
 	.  error
@@ -145,1672 +150,1740 @@ state 6
 
 state 7
 	ClassDeclaration : CLASS Identifier . $$2 '{' VarDeclarationList MethodDeclarationList '}'  (7)
+	ClassDeclaration : CLASS Identifier . EXTENDS Identifier $$3 '{' VarDeclarationList MethodDeclarationList '}'  (9)
 	$$2 : .  (6)
 
-	.  reduce 6
+	EXTENDS  shift 9
+	'{'  reduce 6
 
-	$$2  goto 9
+	$$2  goto 10
 
 
 state 8
 	MainClass : APP '{' . PUBLIC STATIC VOID MAIN '(' STRING '[' ']' Identifier ')' '{' $$1 Statement '}' '}'  (5)
 
-	PUBLIC  shift 10
+	PUBLIC  shift 11
 	.  error
 
 
 state 9
-	ClassDeclaration : CLASS Identifier $$2 . '{' VarDeclarationList MethodDeclarationList '}'  (7)
+	ClassDeclaration : CLASS Identifier EXTENDS . Identifier $$3 '{' VarDeclarationList MethodDeclarationList '}'  (9)
 
-	'{'  shift 11
+	Identifier  shift 12
 	.  error
 
 
 state 10
-	MainClass : APP '{' PUBLIC . STATIC VOID MAIN '(' STRING '[' ']' Identifier ')' '{' $$1 Statement '}' '}'  (5)
+	ClassDeclaration : CLASS Identifier $$2 . '{' VarDeclarationList MethodDeclarationList '}'  (7)
 
-	STATIC  shift 12
+	'{'  shift 13
 	.  error
 
 
 state 11
-	ClassDeclaration : CLASS Identifier $$2 '{' . VarDeclarationList MethodDeclarationList '}'  (7)
-	VarDeclarationList : .  (13)
+	MainClass : APP '{' PUBLIC . STATIC VOID MAIN '(' STRING '[' ']' Identifier ')' '{' $$1 Statement '}' '}'  (5)
 
-	.  reduce 13
-
-	VarDeclarationList  goto 13
-
-
-state 12
-	MainClass : APP '{' PUBLIC STATIC . VOID MAIN '(' STRING '[' ']' Identifier ')' '{' $$1 Statement '}' '}'  (5)
-
-	VOID  shift 14
+	STATIC  shift 14
 	.  error
 
 
+state 12
+	ClassDeclaration : CLASS Identifier EXTENDS Identifier . $$3 '{' VarDeclarationList MethodDeclarationList '}'  (9)
+	$$3 : .  (8)
+
+	.  reduce 8
+
+	$$3  goto 15
+
+
 state 13
-	ClassDeclaration : CLASS Identifier $$2 '{' VarDeclarationList . MethodDeclarationList '}'  (7)
-	VarDeclarationList : VarDeclarationList . VarDeclaration  (12)
-	MethodDeclarationList : .  (9)
+	ClassDeclaration : CLASS Identifier $$2 '{' . VarDeclarationList MethodDeclarationList '}'  (7)
+	VarDeclarationList : .  (15)
 
-	INT  shift 15
-	BOOLEAN  shift 16
-	Identifier  shift 17
-	PUBLIC  reduce 9
-	'}'  reduce 9
+	.  reduce 15
 
-	Type  goto 18
-	BaseType  goto 19
-	MethodDeclarationList  goto 20
-	VarDeclaration  goto 21
+	VarDeclarationList  goto 16
 
 
 state 14
-	MainClass : APP '{' PUBLIC STATIC VOID . MAIN '(' STRING '[' ']' Identifier ')' '{' $$1 Statement '}' '}'  (5)
+	MainClass : APP '{' PUBLIC STATIC . VOID MAIN '(' STRING '[' ']' Identifier ')' '{' $$1 Statement '}' '}'  (5)
 
-	MAIN  shift 22
+	VOID  shift 17
 	.  error
 
 
 state 15
-	BaseType : INT .  (33)
+	ClassDeclaration : CLASS Identifier EXTENDS Identifier $$3 . '{' VarDeclarationList MethodDeclarationList '}'  (9)
 
-	.  reduce 33
+	'{'  shift 18
+	.  error
 
 
 state 16
-	BaseType : BOOLEAN .  (32)
+	ClassDeclaration : CLASS Identifier $$2 '{' VarDeclarationList . MethodDeclarationList '}'  (7)
+	VarDeclarationList : VarDeclarationList . VarDeclaration  (14)
+	MethodDeclarationList : .  (11)
 
-	.  reduce 32
+	INT  shift 19
+	BOOLEAN  shift 20
+	Identifier  shift 21
+	PUBLIC  reduce 11
+	'}'  reduce 11
+
+	Type  goto 22
+	BaseType  goto 23
+	MethodDeclarationList  goto 24
+	VarDeclaration  goto 25
 
 
 state 17
-	Type : Identifier .  (35)
+	MainClass : APP '{' PUBLIC STATIC VOID . MAIN '(' STRING '[' ']' Identifier ')' '{' $$1 Statement '}' '}'  (5)
+
+	MAIN  shift 26
+	.  error
+
+
+state 18
+	ClassDeclaration : CLASS Identifier EXTENDS Identifier $$3 '{' . VarDeclarationList MethodDeclarationList '}'  (9)
+	VarDeclarationList : .  (15)
+
+	.  reduce 15
+
+	VarDeclarationList  goto 27
+
+
+state 19
+	BaseType : INT .  (35)
 
 	.  reduce 35
 
 
-state 18
-	VarDeclaration : Type . Identifier ';'  (14)
-
-	Identifier  shift 23
-	.  error
-
-
-state 19
-	Type : BaseType .  (34)
+state 20
+	BaseType : BOOLEAN .  (34)
 
 	.  reduce 34
 
 
-state 20
-	ClassDeclaration : CLASS Identifier $$2 '{' VarDeclarationList MethodDeclarationList . '}'  (7)
-	MethodDeclarationList : MethodDeclarationList . MethodDeclaration  (8)
-
-	PUBLIC  shift 24
-	'}'  shift 25
-	.  error
-
-	MethodDeclaration  goto 26
-
-
 state 21
-	VarDeclarationList : VarDeclarationList VarDeclaration .  (12)
+	Type : Identifier .  (37)
 
-	.  reduce 12
+	.  reduce 37
 
 
 state 22
-	MainClass : APP '{' PUBLIC STATIC VOID MAIN . '(' STRING '[' ']' Identifier ')' '{' $$1 Statement '}' '}'  (5)
+	VarDeclaration : Type . Identifier ';'  (16)
 
-	'('  shift 27
+	Identifier  shift 28
 	.  error
 
 
 state 23
-	VarDeclaration : Type Identifier . ';'  (14)
+	Type : BaseType .  (36)
 
-	';'  shift 28
-	.  error
+	.  reduce 36
 
 
 state 24
-	MethodDeclaration : PUBLIC . Type Identifier $$3 '(' ParamList ')' '{' DeclOrStatList RETURN Exp ';' '}'  (11)
+	ClassDeclaration : CLASS Identifier $$2 '{' VarDeclarationList MethodDeclarationList . '}'  (7)
+	MethodDeclarationList : MethodDeclarationList . MethodDeclaration  (10)
 
-	INT  shift 15
-	BOOLEAN  shift 16
-	Identifier  shift 17
+	PUBLIC  shift 29
+	'}'  shift 30
 	.  error
 
-	Type  goto 29
-	BaseType  goto 19
+	MethodDeclaration  goto 31
 
 
 state 25
+	VarDeclarationList : VarDeclarationList VarDeclaration .  (14)
+
+	.  reduce 14
+
+
+state 26
+	MainClass : APP '{' PUBLIC STATIC VOID MAIN . '(' STRING '[' ']' Identifier ')' '{' $$1 Statement '}' '}'  (5)
+
+	'('  shift 32
+	.  error
+
+
+state 27
+	ClassDeclaration : CLASS Identifier EXTENDS Identifier $$3 '{' VarDeclarationList . MethodDeclarationList '}'  (9)
+	VarDeclarationList : VarDeclarationList . VarDeclaration  (14)
+	MethodDeclarationList : .  (11)
+
+	INT  shift 19
+	BOOLEAN  shift 20
+	Identifier  shift 21
+	PUBLIC  reduce 11
+	'}'  reduce 11
+
+	Type  goto 22
+	BaseType  goto 23
+	MethodDeclarationList  goto 33
+	VarDeclaration  goto 25
+
+
+state 28
+	VarDeclaration : Type Identifier . ';'  (16)
+
+	';'  shift 34
+	.  error
+
+
+state 29
+	MethodDeclaration : PUBLIC . Type Identifier $$4 '(' ParamList ')' '{' DeclOrStatList RETURN Exp ';' '}'  (13)
+
+	INT  shift 19
+	BOOLEAN  shift 20
+	Identifier  shift 21
+	.  error
+
+	Type  goto 35
+	BaseType  goto 23
+
+
+state 30
 	ClassDeclaration : CLASS Identifier $$2 '{' VarDeclarationList MethodDeclarationList '}' .  (7)
 
 	.  reduce 7
 
 
-state 26
-	MethodDeclarationList : MethodDeclarationList MethodDeclaration .  (8)
-
-	.  reduce 8
-
-
-state 27
-	MainClass : APP '{' PUBLIC STATIC VOID MAIN '(' . STRING '[' ']' Identifier ')' '{' $$1 Statement '}' '}'  (5)
-
-	STRING  shift 30
-	.  error
-
-
-state 28
-	VarDeclaration : Type Identifier ';' .  (14)
-
-	.  reduce 14
-
-
-state 29
-	MethodDeclaration : PUBLIC Type . Identifier $$3 '(' ParamList ')' '{' DeclOrStatList RETURN Exp ';' '}'  (11)
-
-	Identifier  shift 31
-	.  error
-
-
-state 30
-	MainClass : APP '{' PUBLIC STATIC VOID MAIN '(' STRING . '[' ']' Identifier ')' '{' $$1 Statement '}' '}'  (5)
-
-	'['  shift 32
-	.  error
-
-
 state 31
-	MethodDeclaration : PUBLIC Type Identifier . $$3 '(' ParamList ')' '{' DeclOrStatList RETURN Exp ';' '}'  (11)
-	$$3 : .  (10)
+	MethodDeclarationList : MethodDeclarationList MethodDeclaration .  (10)
 
 	.  reduce 10
 
-	$$3  goto 33
-
 
 state 32
-	MainClass : APP '{' PUBLIC STATIC VOID MAIN '(' STRING '[' . ']' Identifier ')' '{' $$1 Statement '}' '}'  (5)
+	MainClass : APP '{' PUBLIC STATIC VOID MAIN '(' . STRING '[' ']' Identifier ')' '{' $$1 Statement '}' '}'  (5)
 
-	']'  shift 34
+	STRING  shift 36
 	.  error
 
 
 state 33
-	MethodDeclaration : PUBLIC Type Identifier $$3 . '(' ParamList ')' '{' DeclOrStatList RETURN Exp ';' '}'  (11)
+	ClassDeclaration : CLASS Identifier EXTENDS Identifier $$3 '{' VarDeclarationList MethodDeclarationList . '}'  (9)
+	MethodDeclarationList : MethodDeclarationList . MethodDeclaration  (10)
 
-	'('  shift 35
+	PUBLIC  shift 29
+	'}'  shift 37
 	.  error
+
+	MethodDeclaration  goto 31
 
 
 state 34
-	MainClass : APP '{' PUBLIC STATIC VOID MAIN '(' STRING '[' ']' . Identifier ')' '{' $$1 Statement '}' '}'  (5)
+	VarDeclaration : Type Identifier ';' .  (16)
 
-	Identifier  shift 36
-	.  error
+	.  reduce 16
 
 
 state 35
-	MethodDeclaration : PUBLIC Type Identifier $$3 '(' . ParamList ')' '{' DeclOrStatList RETURN Exp ';' '}'  (11)
-	ParamList : .  (28)
+	MethodDeclaration : PUBLIC Type . Identifier $$4 '(' ParamList ')' '{' DeclOrStatList RETURN Exp ';' '}'  (13)
 
-	INT  shift 15
-	BOOLEAN  shift 16
-	Identifier  shift 17
-	')'  reduce 28
-
-	Type  goto 37
-	BaseType  goto 19
-	ParamList  goto 38
+	Identifier  shift 38
+	.  error
 
 
 state 36
-	MainClass : APP '{' PUBLIC STATIC VOID MAIN '(' STRING '[' ']' Identifier . ')' '{' $$1 Statement '}' '}'  (5)
+	MainClass : APP '{' PUBLIC STATIC VOID MAIN '(' STRING . '[' ']' Identifier ')' '{' $$1 Statement '}' '}'  (5)
 
-	')'  shift 39
+	'['  shift 39
 	.  error
 
 
 state 37
-	ParamList : Type . Identifier $$7 ParamListAux  (27)
+	ClassDeclaration : CLASS Identifier EXTENDS Identifier $$3 '{' VarDeclarationList MethodDeclarationList '}' .  (9)
 
-	Identifier  shift 40
-	.  error
+	.  reduce 9
 
 
 state 38
-	MethodDeclaration : PUBLIC Type Identifier $$3 '(' ParamList . ')' '{' DeclOrStatList RETURN Exp ';' '}'  (11)
+	MethodDeclaration : PUBLIC Type Identifier . $$4 '(' ParamList ')' '{' DeclOrStatList RETURN Exp ';' '}'  (13)
+	$$4 : .  (12)
 
-	')'  shift 41
-	.  error
+	.  reduce 12
+
+	$$4  goto 40
 
 
 state 39
-	MainClass : APP '{' PUBLIC STATIC VOID MAIN '(' STRING '[' ']' Identifier ')' . '{' $$1 Statement '}' '}'  (5)
+	MainClass : APP '{' PUBLIC STATIC VOID MAIN '(' STRING '[' . ']' Identifier ')' '{' $$1 Statement '}' '}'  (5)
 
-	'{'  shift 42
+	']'  shift 41
 	.  error
 
 
 state 40
-	ParamList : Type Identifier . $$7 ParamListAux  (27)
-	$$7 : .  (26)
+	MethodDeclaration : PUBLIC Type Identifier $$4 . '(' ParamList ')' '{' DeclOrStatList RETURN Exp ';' '}'  (13)
 
-	.  reduce 26
-
-	$$7  goto 43
+	'('  shift 42
+	.  error
 
 
 state 41
-	MethodDeclaration : PUBLIC Type Identifier $$3 '(' ParamList ')' . '{' DeclOrStatList RETURN Exp ';' '}'  (11)
+	MainClass : APP '{' PUBLIC STATIC VOID MAIN '(' STRING '[' ']' . Identifier ')' '{' $$1 Statement '}' '}'  (5)
 
-	'{'  shift 44
+	Identifier  shift 43
 	.  error
 
 
 state 42
+	MethodDeclaration : PUBLIC Type Identifier $$4 '(' . ParamList ')' '{' DeclOrStatList RETURN Exp ';' '}'  (13)
+	ParamList : .  (30)
+
+	INT  shift 19
+	BOOLEAN  shift 20
+	Identifier  shift 21
+	')'  reduce 30
+
+	Type  goto 44
+	BaseType  goto 23
+	ParamList  goto 45
+
+
+state 43
+	MainClass : APP '{' PUBLIC STATIC VOID MAIN '(' STRING '[' ']' Identifier . ')' '{' $$1 Statement '}' '}'  (5)
+
+	')'  shift 46
+	.  error
+
+
+state 44
+	ParamList : Type . Identifier $$8 ParamListAux  (29)
+
+	Identifier  shift 47
+	.  error
+
+
+state 45
+	MethodDeclaration : PUBLIC Type Identifier $$4 '(' ParamList . ')' '{' DeclOrStatList RETURN Exp ';' '}'  (13)
+
+	')'  shift 48
+	.  error
+
+
+state 46
+	MainClass : APP '{' PUBLIC STATIC VOID MAIN '(' STRING '[' ']' Identifier ')' . '{' $$1 Statement '}' '}'  (5)
+
+	'{'  shift 49
+	.  error
+
+
+state 47
+	ParamList : Type Identifier . $$8 ParamListAux  (29)
+	$$8 : .  (28)
+
+	.  reduce 28
+
+	$$8  goto 50
+
+
+state 48
+	MethodDeclaration : PUBLIC Type Identifier $$4 '(' ParamList ')' . '{' DeclOrStatList RETURN Exp ';' '}'  (13)
+
+	'{'  shift 51
+	.  error
+
+
+state 49
 	MainClass : APP '{' PUBLIC STATIC VOID MAIN '(' STRING '[' ']' Identifier ')' '{' . $$1 Statement '}' '}'  (5)
 	$$1 : .  (4)
 
 	.  reduce 4
 
-	$$1  goto 45
+	$$1  goto 52
 
 
-state 43
-	ParamList : Type Identifier $$7 . ParamListAux  (27)
-	ParamListAux : .  (31)
+state 50
+	ParamList : Type Identifier $$8 . ParamListAux  (29)
+	ParamListAux : .  (33)
 
-	','  shift 46
-	')'  reduce 31
+	','  shift 53
+	')'  reduce 33
 
-	ParamListAux  goto 47
-
-
-state 44
-	MethodDeclaration : PUBLIC Type Identifier $$3 '(' ParamList ')' '{' . DeclOrStatList RETURN Exp ';' '}'  (11)
-	DeclOrStatList : .  (25)
-
-	INT  shift 15
-	BOOLEAN  shift 16
-	IF  shift 48
-	WHILE  shift 49
-	SOUT  shift 50
-	Identifier  shift 51
-	'{'  shift 52
-	RETURN  reduce 25
-
-	BaseType  goto 53
-	DeclOrStatList  goto 54
+	ParamListAux  goto 54
 
 
-state 45
-	MainClass : APP '{' PUBLIC STATIC VOID MAIN '(' STRING '[' ']' Identifier ')' '{' $$1 . Statement '}' '}'  (5)
+state 51
+	MethodDeclaration : PUBLIC Type Identifier $$4 '(' ParamList ')' '{' . DeclOrStatList RETURN Exp ';' '}'  (13)
+	DeclOrStatList : .  (27)
 
+	INT  shift 19
+	BOOLEAN  shift 20
 	IF  shift 55
 	WHILE  shift 56
 	SOUT  shift 57
 	Identifier  shift 58
 	'{'  shift 59
-	.  error
+	RETURN  reduce 27
 
-	Statement  goto 60
-
-
-state 46
-	ParamListAux : ',' . Type Identifier $$8 ParamListAux  (30)
-
-	INT  shift 15
-	BOOLEAN  shift 16
-	Identifier  shift 17
-	.  error
-
-	Type  goto 61
-	BaseType  goto 19
-
-
-state 47
-	ParamList : Type Identifier $$7 ParamListAux .  (27)
-
-	.  reduce 27
-
-
-state 48
-	DeclOrStatList : IF . '(' Exp ')' Statement ELSE Statement StatementList  (22)
-
-	'('  shift 62
-	.  error
-
-
-state 49
-	DeclOrStatList : WHILE . '(' Exp ')' Statement StatementList  (23)
-
-	'('  shift 63
-	.  error
-
-
-state 50
-	DeclOrStatList : SOUT . '(' Exp ')' ';' StatementList  (24)
-
-	'('  shift 64
-	.  error
-
-
-state 51
-	DeclOrStatList : Identifier . Identifier ';' $$4 DeclOrStatList  (16)
-	DeclOrStatList : Identifier . '=' Exp ';' $$6 StatementList  (20)
-
-	Identifier  shift 65
-	'='  shift 66
-	.  error
+	BaseType  goto 60
+	DeclOrStatList  goto 61
 
 
 state 52
-	DeclOrStatList : '{' . StatementList '}'  (21)
-	StatementList : .  (42)
+	MainClass : APP '{' PUBLIC STATIC VOID MAIN '(' STRING '[' ']' Identifier ')' '{' $$1 . Statement '}' '}'  (5)
 
-	.  reduce 42
+	IF  shift 62
+	WHILE  shift 63
+	SOUT  shift 64
+	Identifier  shift 65
+	'{'  shift 66
+	.  error
 
-	StatementList  goto 67
+	Statement  goto 67
 
 
 state 53
-	DeclOrStatList : BaseType . Identifier ';' $$5 DeclOrStatList  (18)
+	ParamListAux : ',' . Type Identifier $$9 ParamListAux  (32)
 
-	Identifier  shift 68
+	INT  shift 19
+	BOOLEAN  shift 20
+	Identifier  shift 21
 	.  error
+
+	Type  goto 68
+	BaseType  goto 23
 
 
 state 54
-	MethodDeclaration : PUBLIC Type Identifier $$3 '(' ParamList ')' '{' DeclOrStatList . RETURN Exp ';' '}'  (11)
+	ParamList : Type Identifier $$8 ParamListAux .  (29)
 
-	RETURN  shift 69
-	.  error
+	.  reduce 29
 
 
 state 55
-	Statement : IF . '(' Exp ')' Statement ELSE Statement  (37)
+	DeclOrStatList : IF . '(' Exp ')' Statement ELSE Statement StatementList  (24)
+
+	'('  shift 69
+	.  error
+
+
+state 56
+	DeclOrStatList : WHILE . '(' Exp ')' Statement StatementList  (25)
 
 	'('  shift 70
 	.  error
 
 
-state 56
-	Statement : WHILE . '(' Exp ')' Statement  (38)
+state 57
+	DeclOrStatList : SOUT . '(' Exp ')' ';' StatementList  (26)
 
 	'('  shift 71
 	.  error
 
 
-state 57
-	Statement : SOUT . '(' Exp ')' ';'  (39)
-
-	'('  shift 72
-	.  error
-
-
 state 58
-	Statement : Identifier . '=' Exp ';'  (40)
+	DeclOrStatList : Identifier . Identifier ';' $$5 DeclOrStatList  (18)
+	DeclOrStatList : Identifier . '=' Exp ';' $$7 StatementList  (22)
 
+	Identifier  shift 72
 	'='  shift 73
 	.  error
 
 
 state 59
-	Statement : '{' . StatementList '}'  (36)
-	StatementList : .  (42)
+	DeclOrStatList : '{' . StatementList '}'  (23)
+	StatementList : .  (44)
 
-	.  reduce 42
+	.  reduce 44
 
 	StatementList  goto 74
 
 
 state 60
-	MainClass : APP '{' PUBLIC STATIC VOID MAIN '(' STRING '[' ']' Identifier ')' '{' $$1 Statement . '}' '}'  (5)
+	DeclOrStatList : BaseType . Identifier ';' $$6 DeclOrStatList  (20)
 
-	'}'  shift 75
+	Identifier  shift 75
 	.  error
 
 
 state 61
-	ParamListAux : ',' Type . Identifier $$8 ParamListAux  (30)
+	MethodDeclaration : PUBLIC Type Identifier $$4 '(' ParamList ')' '{' DeclOrStatList . RETURN Exp ';' '}'  (13)
 
-	Identifier  shift 76
+	RETURN  shift 76
 	.  error
 
 
 state 62
-	DeclOrStatList : IF '(' . Exp ')' Statement ELSE Statement StatementList  (22)
+	Statement : IF . '(' Exp ')' Statement ELSE Statement  (39)
 
-	NEW  shift 77
-	TRUE  shift 78
-	FALSE  shift 79
-	THIS  shift 80
-	Identifier  shift 81
-	Number  shift 82
-	'!'  shift 83
-	'('  shift 84
+	'('  shift 77
 	.  error
-
-	Exp  goto 85
 
 
 state 63
-	DeclOrStatList : WHILE '(' . Exp ')' Statement StatementList  (23)
+	Statement : WHILE . '(' Exp ')' Statement  (40)
 
-	NEW  shift 77
-	TRUE  shift 78
-	FALSE  shift 79
-	THIS  shift 80
-	Identifier  shift 81
-	Number  shift 82
-	'!'  shift 83
-	'('  shift 84
+	'('  shift 78
 	.  error
-
-	Exp  goto 86
 
 
 state 64
-	DeclOrStatList : SOUT '(' . Exp ')' ';' StatementList  (24)
+	Statement : SOUT . '(' Exp ')' ';'  (41)
 
-	NEW  shift 77
-	TRUE  shift 78
-	FALSE  shift 79
-	THIS  shift 80
-	Identifier  shift 81
-	Number  shift 82
-	'!'  shift 83
-	'('  shift 84
+	'('  shift 79
 	.  error
-
-	Exp  goto 87
 
 
 state 65
-	DeclOrStatList : Identifier Identifier . ';' $$4 DeclOrStatList  (16)
+	Statement : Identifier . '=' Exp ';'  (42)
 
-	';'  shift 88
+	'='  shift 80
 	.  error
 
 
 state 66
-	DeclOrStatList : Identifier '=' . Exp ';' $$6 StatementList  (20)
+	Statement : '{' . StatementList '}'  (38)
+	StatementList : .  (44)
 
-	NEW  shift 77
-	TRUE  shift 78
-	FALSE  shift 79
-	THIS  shift 80
-	Identifier  shift 81
-	Number  shift 82
-	'!'  shift 83
-	'('  shift 84
-	.  error
+	.  reduce 44
 
-	Exp  goto 89
+	StatementList  goto 81
 
 
 state 67
-	DeclOrStatList : '{' StatementList . '}'  (21)
-	StatementList : StatementList . Statement  (41)
+	MainClass : APP '{' PUBLIC STATIC VOID MAIN '(' STRING '[' ']' Identifier ')' '{' $$1 Statement . '}' '}'  (5)
 
-	IF  shift 55
-	WHILE  shift 56
-	SOUT  shift 57
-	Identifier  shift 58
-	'{'  shift 59
-	'}'  shift 90
+	'}'  shift 82
 	.  error
-
-	Statement  goto 91
 
 
 state 68
-	DeclOrStatList : BaseType Identifier . ';' $$5 DeclOrStatList  (18)
+	ParamListAux : ',' Type . Identifier $$9 ParamListAux  (32)
 
-	';'  shift 92
+	Identifier  shift 83
 	.  error
 
 
 state 69
-	MethodDeclaration : PUBLIC Type Identifier $$3 '(' ParamList ')' '{' DeclOrStatList RETURN . Exp ';' '}'  (11)
+	DeclOrStatList : IF '(' . Exp ')' Statement ELSE Statement StatementList  (24)
 
-	NEW  shift 77
-	TRUE  shift 78
-	FALSE  shift 79
-	THIS  shift 80
-	Identifier  shift 81
-	Number  shift 82
-	'!'  shift 83
-	'('  shift 84
+	NEW  shift 84
+	TRUE  shift 85
+	FALSE  shift 86
+	THIS  shift 87
+	Identifier  shift 88
+	Number  shift 89
+	'!'  shift 90
+	'('  shift 91
+	.  error
+
+	Exp  goto 92
+
+
+state 70
+	DeclOrStatList : WHILE '(' . Exp ')' Statement StatementList  (25)
+
+	NEW  shift 84
+	TRUE  shift 85
+	FALSE  shift 86
+	THIS  shift 87
+	Identifier  shift 88
+	Number  shift 89
+	'!'  shift 90
+	'('  shift 91
 	.  error
 
 	Exp  goto 93
 
 
-state 70
-	Statement : IF '(' . Exp ')' Statement ELSE Statement  (37)
+state 71
+	DeclOrStatList : SOUT '(' . Exp ')' ';' StatementList  (26)
 
-	NEW  shift 77
-	TRUE  shift 78
-	FALSE  shift 79
-	THIS  shift 80
-	Identifier  shift 81
-	Number  shift 82
-	'!'  shift 83
-	'('  shift 84
+	NEW  shift 84
+	TRUE  shift 85
+	FALSE  shift 86
+	THIS  shift 87
+	Identifier  shift 88
+	Number  shift 89
+	'!'  shift 90
+	'('  shift 91
 	.  error
 
 	Exp  goto 94
 
 
-state 71
-	Statement : WHILE '(' . Exp ')' Statement  (38)
+state 72
+	DeclOrStatList : Identifier Identifier . ';' $$5 DeclOrStatList  (18)
 
-	NEW  shift 77
-	TRUE  shift 78
-	FALSE  shift 79
-	THIS  shift 80
-	Identifier  shift 81
-	Number  shift 82
-	'!'  shift 83
-	'('  shift 84
+	';'  shift 95
 	.  error
 
-	Exp  goto 95
 
+state 73
+	DeclOrStatList : Identifier '=' . Exp ';' $$7 StatementList  (22)
 
-state 72
-	Statement : SOUT '(' . Exp ')' ';'  (39)
-
-	NEW  shift 77
-	TRUE  shift 78
-	FALSE  shift 79
-	THIS  shift 80
-	Identifier  shift 81
-	Number  shift 82
-	'!'  shift 83
-	'('  shift 84
+	NEW  shift 84
+	TRUE  shift 85
+	FALSE  shift 86
+	THIS  shift 87
+	Identifier  shift 88
+	Number  shift 89
+	'!'  shift 90
+	'('  shift 91
 	.  error
 
 	Exp  goto 96
 
 
-state 73
-	Statement : Identifier '=' . Exp ';'  (40)
-
-	NEW  shift 77
-	TRUE  shift 78
-	FALSE  shift 79
-	THIS  shift 80
-	Identifier  shift 81
-	Number  shift 82
-	'!'  shift 83
-	'('  shift 84
-	.  error
-
-	Exp  goto 97
-
-
 state 74
-	Statement : '{' StatementList . '}'  (36)
-	StatementList : StatementList . Statement  (41)
+	DeclOrStatList : '{' StatementList . '}'  (23)
+	StatementList : StatementList . Statement  (43)
 
-	IF  shift 55
-	WHILE  shift 56
-	SOUT  shift 57
-	Identifier  shift 58
-	'{'  shift 59
-	'}'  shift 98
+	IF  shift 62
+	WHILE  shift 63
+	SOUT  shift 64
+	Identifier  shift 65
+	'{'  shift 66
+	'}'  shift 97
 	.  error
 
-	Statement  goto 91
+	Statement  goto 98
 
 
 state 75
-	MainClass : APP '{' PUBLIC STATIC VOID MAIN '(' STRING '[' ']' Identifier ')' '{' $$1 Statement '}' . '}'  (5)
+	DeclOrStatList : BaseType Identifier . ';' $$6 DeclOrStatList  (20)
 
-	'}'  shift 99
+	';'  shift 99
 	.  error
 
 
 state 76
-	ParamListAux : ',' Type Identifier . $$8 ParamListAux  (30)
-	$$8 : .  (29)
+	MethodDeclaration : PUBLIC Type Identifier $$4 '(' ParamList ')' '{' DeclOrStatList RETURN . Exp ';' '}'  (13)
 
-	.  reduce 29
+	NEW  shift 84
+	TRUE  shift 85
+	FALSE  shift 86
+	THIS  shift 87
+	Identifier  shift 88
+	Number  shift 89
+	'!'  shift 90
+	'('  shift 91
+	.  error
 
-	$$8  goto 100
+	Exp  goto 100
 
 
 state 77
-	Exp : NEW . Identifier '(' ')'  (55)
+	Statement : IF '(' . Exp ')' Statement ELSE Statement  (39)
 
-	Identifier  shift 101
+	NEW  shift 84
+	TRUE  shift 85
+	FALSE  shift 86
+	THIS  shift 87
+	Identifier  shift 88
+	Number  shift 89
+	'!'  shift 90
+	'('  shift 91
 	.  error
+
+	Exp  goto 101
 
 
 state 78
-	Exp : TRUE .  (51)
+	Statement : WHILE '(' . Exp ')' Statement  (40)
 
-	.  reduce 51
-
-
-state 79
-	Exp : FALSE .  (52)
-
-	.  reduce 52
-
-
-state 80
-	Exp : THIS .  (54)
-
-	.  reduce 54
-
-
-state 81
-	Exp : Identifier .  (53)
-
-	.  reduce 53
-
-
-state 82
-	Exp : Number .  (50)
-
-	.  reduce 50
-
-
-state 83
-	Exp : '!' . Exp  (56)
-
-	NEW  shift 77
-	TRUE  shift 78
-	FALSE  shift 79
-	THIS  shift 80
-	Identifier  shift 81
-	Number  shift 82
-	'!'  shift 83
-	'('  shift 84
+	NEW  shift 84
+	TRUE  shift 85
+	FALSE  shift 86
+	THIS  shift 87
+	Identifier  shift 88
+	Number  shift 89
+	'!'  shift 90
+	'('  shift 91
 	.  error
 
 	Exp  goto 102
 
 
-state 84
-	Exp : '(' . Exp ')'  (57)
+state 79
+	Statement : SOUT '(' . Exp ')' ';'  (41)
 
-	NEW  shift 77
-	TRUE  shift 78
-	FALSE  shift 79
-	THIS  shift 80
-	Identifier  shift 81
-	Number  shift 82
-	'!'  shift 83
-	'('  shift 84
+	NEW  shift 84
+	TRUE  shift 85
+	FALSE  shift 86
+	THIS  shift 87
+	Identifier  shift 88
+	Number  shift 89
+	'!'  shift 90
+	'('  shift 91
 	.  error
 
 	Exp  goto 103
 
 
-state 85
-	DeclOrStatList : IF '(' Exp . ')' Statement ELSE Statement StatementList  (22)
-	Exp : Exp . AND Exp  (43)
-	Exp : Exp . '<' Exp  (44)
-	Exp : Exp . '+' Exp  (45)
-	Exp : Exp . '-' Exp  (46)
-	Exp : Exp . '*' Exp  (47)
-	Exp : Exp . '/' Exp  (48)
-	Exp : Exp . '.' Identifier '(' RealParamList ')'  (49)
+state 80
+	Statement : Identifier '=' . Exp ';'  (42)
 
-	AND  shift 104
-	'<'  shift 105
-	'+'  shift 106
-	'-'  shift 107
-	'*'  shift 108
-	'/'  shift 109
-	'.'  shift 110
-	')'  shift 111
+	NEW  shift 84
+	TRUE  shift 85
+	FALSE  shift 86
+	THIS  shift 87
+	Identifier  shift 88
+	Number  shift 89
+	'!'  shift 90
+	'('  shift 91
 	.  error
+
+	Exp  goto 104
+
+
+state 81
+	Statement : '{' StatementList . '}'  (38)
+	StatementList : StatementList . Statement  (43)
+
+	IF  shift 62
+	WHILE  shift 63
+	SOUT  shift 64
+	Identifier  shift 65
+	'{'  shift 66
+	'}'  shift 105
+	.  error
+
+	Statement  goto 98
+
+
+state 82
+	MainClass : APP '{' PUBLIC STATIC VOID MAIN '(' STRING '[' ']' Identifier ')' '{' $$1 Statement '}' . '}'  (5)
+
+	'}'  shift 106
+	.  error
+
+
+state 83
+	ParamListAux : ',' Type Identifier . $$9 ParamListAux  (32)
+	$$9 : .  (31)
+
+	.  reduce 31
+
+	$$9  goto 107
+
+
+state 84
+	Exp : NEW . Identifier '(' ')'  (57)
+
+	Identifier  shift 108
+	.  error
+
+
+state 85
+	Exp : TRUE .  (53)
+
+	.  reduce 53
 
 
 state 86
-	DeclOrStatList : WHILE '(' Exp . ')' Statement StatementList  (23)
-	Exp : Exp . AND Exp  (43)
-	Exp : Exp . '<' Exp  (44)
-	Exp : Exp . '+' Exp  (45)
-	Exp : Exp . '-' Exp  (46)
-	Exp : Exp . '*' Exp  (47)
-	Exp : Exp . '/' Exp  (48)
-	Exp : Exp . '.' Identifier '(' RealParamList ')'  (49)
+	Exp : FALSE .  (54)
 
-	AND  shift 104
-	'<'  shift 105
-	'+'  shift 106
-	'-'  shift 107
-	'*'  shift 108
-	'/'  shift 109
-	'.'  shift 110
-	')'  shift 112
-	.  error
+	.  reduce 54
 
 
 state 87
-	DeclOrStatList : SOUT '(' Exp . ')' ';' StatementList  (24)
-	Exp : Exp . AND Exp  (43)
-	Exp : Exp . '<' Exp  (44)
-	Exp : Exp . '+' Exp  (45)
-	Exp : Exp . '-' Exp  (46)
-	Exp : Exp . '*' Exp  (47)
-	Exp : Exp . '/' Exp  (48)
-	Exp : Exp . '.' Identifier '(' RealParamList ')'  (49)
+	Exp : THIS .  (56)
 
-	AND  shift 104
-	'<'  shift 105
-	'+'  shift 106
-	'-'  shift 107
-	'*'  shift 108
-	'/'  shift 109
-	'.'  shift 110
-	')'  shift 113
-	.  error
+	.  reduce 56
 
 
 state 88
-	DeclOrStatList : Identifier Identifier ';' . $$4 DeclOrStatList  (16)
-	$$4 : .  (15)
+	Exp : Identifier .  (55)
 
-	.  reduce 15
-
-	$$4  goto 114
+	.  reduce 55
 
 
 state 89
-	DeclOrStatList : Identifier '=' Exp . ';' $$6 StatementList  (20)
-	Exp : Exp . AND Exp  (43)
-	Exp : Exp . '<' Exp  (44)
-	Exp : Exp . '+' Exp  (45)
-	Exp : Exp . '-' Exp  (46)
-	Exp : Exp . '*' Exp  (47)
-	Exp : Exp . '/' Exp  (48)
-	Exp : Exp . '.' Identifier '(' RealParamList ')'  (49)
+	Exp : Number .  (52)
 
-	AND  shift 104
-	'<'  shift 105
-	'+'  shift 106
-	'-'  shift 107
-	'*'  shift 108
-	'/'  shift 109
-	'.'  shift 110
-	';'  shift 115
-	.  error
+	.  reduce 52
 
 
 state 90
-	DeclOrStatList : '{' StatementList '}' .  (21)
+	Exp : '!' . Exp  (58)
 
-	.  reduce 21
+	NEW  shift 84
+	TRUE  shift 85
+	FALSE  shift 86
+	THIS  shift 87
+	Identifier  shift 88
+	Number  shift 89
+	'!'  shift 90
+	'('  shift 91
+	.  error
+
+	Exp  goto 109
 
 
 state 91
-	StatementList : StatementList Statement .  (41)
+	Exp : '(' . Exp ')'  (59)
 
-	.  reduce 41
+	NEW  shift 84
+	TRUE  shift 85
+	FALSE  shift 86
+	THIS  shift 87
+	Identifier  shift 88
+	Number  shift 89
+	'!'  shift 90
+	'('  shift 91
+	.  error
+
+	Exp  goto 110
 
 
 state 92
-	DeclOrStatList : BaseType Identifier ';' . $$5 DeclOrStatList  (18)
-	$$5 : .  (17)
+	DeclOrStatList : IF '(' Exp . ')' Statement ELSE Statement StatementList  (24)
+	Exp : Exp . AND Exp  (45)
+	Exp : Exp . '<' Exp  (46)
+	Exp : Exp . '+' Exp  (47)
+	Exp : Exp . '-' Exp  (48)
+	Exp : Exp . '*' Exp  (49)
+	Exp : Exp . '/' Exp  (50)
+	Exp : Exp . '.' Identifier '(' RealParamList ')'  (51)
 
-	.  reduce 17
-
-	$$5  goto 116
-
-
-state 93
-	MethodDeclaration : PUBLIC Type Identifier $$3 '(' ParamList ')' '{' DeclOrStatList RETURN Exp . ';' '}'  (11)
-	Exp : Exp . AND Exp  (43)
-	Exp : Exp . '<' Exp  (44)
-	Exp : Exp . '+' Exp  (45)
-	Exp : Exp . '-' Exp  (46)
-	Exp : Exp . '*' Exp  (47)
-	Exp : Exp . '/' Exp  (48)
-	Exp : Exp . '.' Identifier '(' RealParamList ')'  (49)
-
-	AND  shift 104
-	'<'  shift 105
-	'+'  shift 106
-	'-'  shift 107
-	'*'  shift 108
-	'/'  shift 109
-	'.'  shift 110
-	';'  shift 117
-	.  error
-
-
-state 94
-	Statement : IF '(' Exp . ')' Statement ELSE Statement  (37)
-	Exp : Exp . AND Exp  (43)
-	Exp : Exp . '<' Exp  (44)
-	Exp : Exp . '+' Exp  (45)
-	Exp : Exp . '-' Exp  (46)
-	Exp : Exp . '*' Exp  (47)
-	Exp : Exp . '/' Exp  (48)
-	Exp : Exp . '.' Identifier '(' RealParamList ')'  (49)
-
-	AND  shift 104
-	'<'  shift 105
-	'+'  shift 106
-	'-'  shift 107
-	'*'  shift 108
-	'/'  shift 109
-	'.'  shift 110
+	AND  shift 111
+	'<'  shift 112
+	'+'  shift 113
+	'-'  shift 114
+	'*'  shift 115
+	'/'  shift 116
+	'.'  shift 117
 	')'  shift 118
 	.  error
 
 
-state 95
-	Statement : WHILE '(' Exp . ')' Statement  (38)
-	Exp : Exp . AND Exp  (43)
-	Exp : Exp . '<' Exp  (44)
-	Exp : Exp . '+' Exp  (45)
-	Exp : Exp . '-' Exp  (46)
-	Exp : Exp . '*' Exp  (47)
-	Exp : Exp . '/' Exp  (48)
-	Exp : Exp . '.' Identifier '(' RealParamList ')'  (49)
+state 93
+	DeclOrStatList : WHILE '(' Exp . ')' Statement StatementList  (25)
+	Exp : Exp . AND Exp  (45)
+	Exp : Exp . '<' Exp  (46)
+	Exp : Exp . '+' Exp  (47)
+	Exp : Exp . '-' Exp  (48)
+	Exp : Exp . '*' Exp  (49)
+	Exp : Exp . '/' Exp  (50)
+	Exp : Exp . '.' Identifier '(' RealParamList ')'  (51)
 
-	AND  shift 104
-	'<'  shift 105
-	'+'  shift 106
-	'-'  shift 107
-	'*'  shift 108
-	'/'  shift 109
-	'.'  shift 110
+	AND  shift 111
+	'<'  shift 112
+	'+'  shift 113
+	'-'  shift 114
+	'*'  shift 115
+	'/'  shift 116
+	'.'  shift 117
 	')'  shift 119
 	.  error
 
 
-state 96
-	Statement : SOUT '(' Exp . ')' ';'  (39)
-	Exp : Exp . AND Exp  (43)
-	Exp : Exp . '<' Exp  (44)
-	Exp : Exp . '+' Exp  (45)
-	Exp : Exp . '-' Exp  (46)
-	Exp : Exp . '*' Exp  (47)
-	Exp : Exp . '/' Exp  (48)
-	Exp : Exp . '.' Identifier '(' RealParamList ')'  (49)
+state 94
+	DeclOrStatList : SOUT '(' Exp . ')' ';' StatementList  (26)
+	Exp : Exp . AND Exp  (45)
+	Exp : Exp . '<' Exp  (46)
+	Exp : Exp . '+' Exp  (47)
+	Exp : Exp . '-' Exp  (48)
+	Exp : Exp . '*' Exp  (49)
+	Exp : Exp . '/' Exp  (50)
+	Exp : Exp . '.' Identifier '(' RealParamList ')'  (51)
 
-	AND  shift 104
-	'<'  shift 105
-	'+'  shift 106
-	'-'  shift 107
-	'*'  shift 108
-	'/'  shift 109
-	'.'  shift 110
+	AND  shift 111
+	'<'  shift 112
+	'+'  shift 113
+	'-'  shift 114
+	'*'  shift 115
+	'/'  shift 116
+	'.'  shift 117
 	')'  shift 120
 	.  error
 
 
-state 97
-	Statement : Identifier '=' Exp . ';'  (40)
-	Exp : Exp . AND Exp  (43)
-	Exp : Exp . '<' Exp  (44)
-	Exp : Exp . '+' Exp  (45)
-	Exp : Exp . '-' Exp  (46)
-	Exp : Exp . '*' Exp  (47)
-	Exp : Exp . '/' Exp  (48)
-	Exp : Exp . '.' Identifier '(' RealParamList ')'  (49)
+state 95
+	DeclOrStatList : Identifier Identifier ';' . $$5 DeclOrStatList  (18)
+	$$5 : .  (17)
 
-	AND  shift 104
-	'<'  shift 105
-	'+'  shift 106
-	'-'  shift 107
-	'*'  shift 108
-	'/'  shift 109
-	'.'  shift 110
-	';'  shift 121
+	.  reduce 17
+
+	$$5  goto 121
+
+
+state 96
+	DeclOrStatList : Identifier '=' Exp . ';' $$7 StatementList  (22)
+	Exp : Exp . AND Exp  (45)
+	Exp : Exp . '<' Exp  (46)
+	Exp : Exp . '+' Exp  (47)
+	Exp : Exp . '-' Exp  (48)
+	Exp : Exp . '*' Exp  (49)
+	Exp : Exp . '/' Exp  (50)
+	Exp : Exp . '.' Identifier '(' RealParamList ')'  (51)
+
+	AND  shift 111
+	'<'  shift 112
+	'+'  shift 113
+	'-'  shift 114
+	'*'  shift 115
+	'/'  shift 116
+	'.'  shift 117
+	';'  shift 122
 	.  error
 
 
-state 98
-	Statement : '{' StatementList '}' .  (36)
+state 97
+	DeclOrStatList : '{' StatementList '}' .  (23)
 
-	.  reduce 36
+	.  reduce 23
+
+
+state 98
+	StatementList : StatementList Statement .  (43)
+
+	.  reduce 43
 
 
 state 99
+	DeclOrStatList : BaseType Identifier ';' . $$6 DeclOrStatList  (20)
+	$$6 : .  (19)
+
+	.  reduce 19
+
+	$$6  goto 123
+
+
+state 100
+	MethodDeclaration : PUBLIC Type Identifier $$4 '(' ParamList ')' '{' DeclOrStatList RETURN Exp . ';' '}'  (13)
+	Exp : Exp . AND Exp  (45)
+	Exp : Exp . '<' Exp  (46)
+	Exp : Exp . '+' Exp  (47)
+	Exp : Exp . '-' Exp  (48)
+	Exp : Exp . '*' Exp  (49)
+	Exp : Exp . '/' Exp  (50)
+	Exp : Exp . '.' Identifier '(' RealParamList ')'  (51)
+
+	AND  shift 111
+	'<'  shift 112
+	'+'  shift 113
+	'-'  shift 114
+	'*'  shift 115
+	'/'  shift 116
+	'.'  shift 117
+	';'  shift 124
+	.  error
+
+
+state 101
+	Statement : IF '(' Exp . ')' Statement ELSE Statement  (39)
+	Exp : Exp . AND Exp  (45)
+	Exp : Exp . '<' Exp  (46)
+	Exp : Exp . '+' Exp  (47)
+	Exp : Exp . '-' Exp  (48)
+	Exp : Exp . '*' Exp  (49)
+	Exp : Exp . '/' Exp  (50)
+	Exp : Exp . '.' Identifier '(' RealParamList ')'  (51)
+
+	AND  shift 111
+	'<'  shift 112
+	'+'  shift 113
+	'-'  shift 114
+	'*'  shift 115
+	'/'  shift 116
+	'.'  shift 117
+	')'  shift 125
+	.  error
+
+
+state 102
+	Statement : WHILE '(' Exp . ')' Statement  (40)
+	Exp : Exp . AND Exp  (45)
+	Exp : Exp . '<' Exp  (46)
+	Exp : Exp . '+' Exp  (47)
+	Exp : Exp . '-' Exp  (48)
+	Exp : Exp . '*' Exp  (49)
+	Exp : Exp . '/' Exp  (50)
+	Exp : Exp . '.' Identifier '(' RealParamList ')'  (51)
+
+	AND  shift 111
+	'<'  shift 112
+	'+'  shift 113
+	'-'  shift 114
+	'*'  shift 115
+	'/'  shift 116
+	'.'  shift 117
+	')'  shift 126
+	.  error
+
+
+state 103
+	Statement : SOUT '(' Exp . ')' ';'  (41)
+	Exp : Exp . AND Exp  (45)
+	Exp : Exp . '<' Exp  (46)
+	Exp : Exp . '+' Exp  (47)
+	Exp : Exp . '-' Exp  (48)
+	Exp : Exp . '*' Exp  (49)
+	Exp : Exp . '/' Exp  (50)
+	Exp : Exp . '.' Identifier '(' RealParamList ')'  (51)
+
+	AND  shift 111
+	'<'  shift 112
+	'+'  shift 113
+	'-'  shift 114
+	'*'  shift 115
+	'/'  shift 116
+	'.'  shift 117
+	')'  shift 127
+	.  error
+
+
+state 104
+	Statement : Identifier '=' Exp . ';'  (42)
+	Exp : Exp . AND Exp  (45)
+	Exp : Exp . '<' Exp  (46)
+	Exp : Exp . '+' Exp  (47)
+	Exp : Exp . '-' Exp  (48)
+	Exp : Exp . '*' Exp  (49)
+	Exp : Exp . '/' Exp  (50)
+	Exp : Exp . '.' Identifier '(' RealParamList ')'  (51)
+
+	AND  shift 111
+	'<'  shift 112
+	'+'  shift 113
+	'-'  shift 114
+	'*'  shift 115
+	'/'  shift 116
+	'.'  shift 117
+	';'  shift 128
+	.  error
+
+
+state 105
+	Statement : '{' StatementList '}' .  (38)
+
+	.  reduce 38
+
+
+state 106
 	MainClass : APP '{' PUBLIC STATIC VOID MAIN '(' STRING '[' ']' Identifier ')' '{' $$1 Statement '}' '}' .  (5)
 
 	.  reduce 5
 
 
-state 100
-	ParamListAux : ',' Type Identifier $$8 . ParamListAux  (30)
-	ParamListAux : .  (31)
-
-	','  shift 46
-	')'  reduce 31
-
-	ParamListAux  goto 122
-
-
-state 101
-	Exp : NEW Identifier . '(' ')'  (55)
-
-	'('  shift 123
-	.  error
-
-
-state 102
-	Exp : Exp . AND Exp  (43)
-	Exp : Exp . '<' Exp  (44)
-	Exp : Exp . '+' Exp  (45)
-	Exp : Exp . '-' Exp  (46)
-	Exp : Exp . '*' Exp  (47)
-	Exp : Exp . '/' Exp  (48)
-	Exp : Exp . '.' Identifier '(' RealParamList ')'  (49)
-	Exp : '!' Exp .  (56)
-
-	'.'  shift 110
-	AND  reduce 56
-	'<'  reduce 56
-	'+'  reduce 56
-	'-'  reduce 56
-	'*'  reduce 56
-	'/'  reduce 56
-	')'  reduce 56
-	';'  reduce 56
-	','  reduce 56
-
-
-state 103
-	Exp : Exp . AND Exp  (43)
-	Exp : Exp . '<' Exp  (44)
-	Exp : Exp . '+' Exp  (45)
-	Exp : Exp . '-' Exp  (46)
-	Exp : Exp . '*' Exp  (47)
-	Exp : Exp . '/' Exp  (48)
-	Exp : Exp . '.' Identifier '(' RealParamList ')'  (49)
-	Exp : '(' Exp . ')'  (57)
-
-	AND  shift 104
-	'<'  shift 105
-	'+'  shift 106
-	'-'  shift 107
-	'*'  shift 108
-	'/'  shift 109
-	'.'  shift 110
-	')'  shift 124
-	.  error
-
-
-state 104
-	Exp : Exp AND . Exp  (43)
-
-	NEW  shift 77
-	TRUE  shift 78
-	FALSE  shift 79
-	THIS  shift 80
-	Identifier  shift 81
-	Number  shift 82
-	'!'  shift 83
-	'('  shift 84
-	.  error
-
-	Exp  goto 125
-
-
-state 105
-	Exp : Exp '<' . Exp  (44)
-
-	NEW  shift 77
-	TRUE  shift 78
-	FALSE  shift 79
-	THIS  shift 80
-	Identifier  shift 81
-	Number  shift 82
-	'!'  shift 83
-	'('  shift 84
-	.  error
-
-	Exp  goto 126
-
-
-state 106
-	Exp : Exp '+' . Exp  (45)
-
-	NEW  shift 77
-	TRUE  shift 78
-	FALSE  shift 79
-	THIS  shift 80
-	Identifier  shift 81
-	Number  shift 82
-	'!'  shift 83
-	'('  shift 84
-	.  error
-
-	Exp  goto 127
-
-
 state 107
-	Exp : Exp '-' . Exp  (46)
+	ParamListAux : ',' Type Identifier $$9 . ParamListAux  (32)
+	ParamListAux : .  (33)
 
-	NEW  shift 77
-	TRUE  shift 78
-	FALSE  shift 79
-	THIS  shift 80
-	Identifier  shift 81
-	Number  shift 82
-	'!'  shift 83
-	'('  shift 84
-	.  error
+	','  shift 53
+	')'  reduce 33
 
-	Exp  goto 128
+	ParamListAux  goto 129
 
 
 state 108
-	Exp : Exp '*' . Exp  (47)
+	Exp : NEW Identifier . '(' ')'  (57)
 
-	NEW  shift 77
-	TRUE  shift 78
-	FALSE  shift 79
-	THIS  shift 80
-	Identifier  shift 81
-	Number  shift 82
-	'!'  shift 83
-	'('  shift 84
+	'('  shift 130
 	.  error
-
-	Exp  goto 129
 
 
 state 109
-	Exp : Exp '/' . Exp  (48)
+	Exp : Exp . AND Exp  (45)
+	Exp : Exp . '<' Exp  (46)
+	Exp : Exp . '+' Exp  (47)
+	Exp : Exp . '-' Exp  (48)
+	Exp : Exp . '*' Exp  (49)
+	Exp : Exp . '/' Exp  (50)
+	Exp : Exp . '.' Identifier '(' RealParamList ')'  (51)
+	Exp : '!' Exp .  (58)
 
-	NEW  shift 77
-	TRUE  shift 78
-	FALSE  shift 79
-	THIS  shift 80
-	Identifier  shift 81
-	Number  shift 82
-	'!'  shift 83
-	'('  shift 84
-	.  error
-
-	Exp  goto 130
+	'.'  shift 117
+	AND  reduce 58
+	'<'  reduce 58
+	'+'  reduce 58
+	'-'  reduce 58
+	'*'  reduce 58
+	'/'  reduce 58
+	')'  reduce 58
+	';'  reduce 58
+	','  reduce 58
 
 
 state 110
-	Exp : Exp '.' . Identifier '(' RealParamList ')'  (49)
+	Exp : Exp . AND Exp  (45)
+	Exp : Exp . '<' Exp  (46)
+	Exp : Exp . '+' Exp  (47)
+	Exp : Exp . '-' Exp  (48)
+	Exp : Exp . '*' Exp  (49)
+	Exp : Exp . '/' Exp  (50)
+	Exp : Exp . '.' Identifier '(' RealParamList ')'  (51)
+	Exp : '(' Exp . ')'  (59)
 
-	Identifier  shift 131
+	AND  shift 111
+	'<'  shift 112
+	'+'  shift 113
+	'-'  shift 114
+	'*'  shift 115
+	'/'  shift 116
+	'.'  shift 117
+	')'  shift 131
 	.  error
 
 
 state 111
-	DeclOrStatList : IF '(' Exp ')' . Statement ELSE Statement StatementList  (22)
+	Exp : Exp AND . Exp  (45)
 
-	IF  shift 55
-	WHILE  shift 56
-	SOUT  shift 57
-	Identifier  shift 58
-	'{'  shift 59
+	NEW  shift 84
+	TRUE  shift 85
+	FALSE  shift 86
+	THIS  shift 87
+	Identifier  shift 88
+	Number  shift 89
+	'!'  shift 90
+	'('  shift 91
 	.  error
 
-	Statement  goto 132
+	Exp  goto 132
 
 
 state 112
-	DeclOrStatList : WHILE '(' Exp ')' . Statement StatementList  (23)
+	Exp : Exp '<' . Exp  (46)
 
-	IF  shift 55
-	WHILE  shift 56
-	SOUT  shift 57
-	Identifier  shift 58
-	'{'  shift 59
+	NEW  shift 84
+	TRUE  shift 85
+	FALSE  shift 86
+	THIS  shift 87
+	Identifier  shift 88
+	Number  shift 89
+	'!'  shift 90
+	'('  shift 91
 	.  error
 
-	Statement  goto 133
+	Exp  goto 133
 
 
 state 113
-	DeclOrStatList : SOUT '(' Exp ')' . ';' StatementList  (24)
+	Exp : Exp '+' . Exp  (47)
 
-	';'  shift 134
+	NEW  shift 84
+	TRUE  shift 85
+	FALSE  shift 86
+	THIS  shift 87
+	Identifier  shift 88
+	Number  shift 89
+	'!'  shift 90
+	'('  shift 91
 	.  error
+
+	Exp  goto 134
 
 
 state 114
-	DeclOrStatList : Identifier Identifier ';' $$4 . DeclOrStatList  (16)
-	DeclOrStatList : .  (25)
+	Exp : Exp '-' . Exp  (48)
 
-	INT  shift 15
-	BOOLEAN  shift 16
-	IF  shift 48
-	WHILE  shift 49
-	SOUT  shift 50
-	Identifier  shift 51
-	'{'  shift 52
-	RETURN  reduce 25
+	NEW  shift 84
+	TRUE  shift 85
+	FALSE  shift 86
+	THIS  shift 87
+	Identifier  shift 88
+	Number  shift 89
+	'!'  shift 90
+	'('  shift 91
+	.  error
 
-	BaseType  goto 53
-	DeclOrStatList  goto 135
+	Exp  goto 135
 
 
 state 115
-	DeclOrStatList : Identifier '=' Exp ';' . $$6 StatementList  (20)
-	$$6 : .  (19)
+	Exp : Exp '*' . Exp  (49)
 
-	.  reduce 19
+	NEW  shift 84
+	TRUE  shift 85
+	FALSE  shift 86
+	THIS  shift 87
+	Identifier  shift 88
+	Number  shift 89
+	'!'  shift 90
+	'('  shift 91
+	.  error
 
-	$$6  goto 136
+	Exp  goto 136
 
 
 state 116
-	DeclOrStatList : BaseType Identifier ';' $$5 . DeclOrStatList  (18)
-	DeclOrStatList : .  (25)
+	Exp : Exp '/' . Exp  (50)
 
-	INT  shift 15
-	BOOLEAN  shift 16
-	IF  shift 48
-	WHILE  shift 49
-	SOUT  shift 50
-	Identifier  shift 51
-	'{'  shift 52
-	RETURN  reduce 25
+	NEW  shift 84
+	TRUE  shift 85
+	FALSE  shift 86
+	THIS  shift 87
+	Identifier  shift 88
+	Number  shift 89
+	'!'  shift 90
+	'('  shift 91
+	.  error
 
-	BaseType  goto 53
-	DeclOrStatList  goto 137
+	Exp  goto 137
 
 
 state 117
-	MethodDeclaration : PUBLIC Type Identifier $$3 '(' ParamList ')' '{' DeclOrStatList RETURN Exp ';' . '}'  (11)
+	Exp : Exp '.' . Identifier '(' RealParamList ')'  (51)
 
-	'}'  shift 138
+	Identifier  shift 138
 	.  error
 
 
 state 118
-	Statement : IF '(' Exp ')' . Statement ELSE Statement  (37)
+	DeclOrStatList : IF '(' Exp ')' . Statement ELSE Statement StatementList  (24)
 
-	IF  shift 55
-	WHILE  shift 56
-	SOUT  shift 57
-	Identifier  shift 58
-	'{'  shift 59
+	IF  shift 62
+	WHILE  shift 63
+	SOUT  shift 64
+	Identifier  shift 65
+	'{'  shift 66
 	.  error
 
 	Statement  goto 139
 
 
 state 119
-	Statement : WHILE '(' Exp ')' . Statement  (38)
+	DeclOrStatList : WHILE '(' Exp ')' . Statement StatementList  (25)
 
-	IF  shift 55
-	WHILE  shift 56
-	SOUT  shift 57
-	Identifier  shift 58
-	'{'  shift 59
+	IF  shift 62
+	WHILE  shift 63
+	SOUT  shift 64
+	Identifier  shift 65
+	'{'  shift 66
 	.  error
 
 	Statement  goto 140
 
 
 state 120
-	Statement : SOUT '(' Exp ')' . ';'  (39)
+	DeclOrStatList : SOUT '(' Exp ')' . ';' StatementList  (26)
 
 	';'  shift 141
 	.  error
 
 
 state 121
-	Statement : Identifier '=' Exp ';' .  (40)
+	DeclOrStatList : Identifier Identifier ';' $$5 . DeclOrStatList  (18)
+	DeclOrStatList : .  (27)
 
-	.  reduce 40
+	INT  shift 19
+	BOOLEAN  shift 20
+	IF  shift 55
+	WHILE  shift 56
+	SOUT  shift 57
+	Identifier  shift 58
+	'{'  shift 59
+	RETURN  reduce 27
+
+	BaseType  goto 60
+	DeclOrStatList  goto 142
 
 
 state 122
-	ParamListAux : ',' Type Identifier $$8 ParamListAux .  (30)
+	DeclOrStatList : Identifier '=' Exp ';' . $$7 StatementList  (22)
+	$$7 : .  (21)
 
-	.  reduce 30
+	.  reduce 21
+
+	$$7  goto 143
 
 
 state 123
-	Exp : NEW Identifier '(' . ')'  (55)
+	DeclOrStatList : BaseType Identifier ';' $$6 . DeclOrStatList  (20)
+	DeclOrStatList : .  (27)
 
-	')'  shift 142
-	.  error
+	INT  shift 19
+	BOOLEAN  shift 20
+	IF  shift 55
+	WHILE  shift 56
+	SOUT  shift 57
+	Identifier  shift 58
+	'{'  shift 59
+	RETURN  reduce 27
+
+	BaseType  goto 60
+	DeclOrStatList  goto 144
 
 
 state 124
-	Exp : '(' Exp ')' .  (57)
+	MethodDeclaration : PUBLIC Type Identifier $$4 '(' ParamList ')' '{' DeclOrStatList RETURN Exp ';' . '}'  (13)
 
-	.  reduce 57
+	'}'  shift 145
+	.  error
 
 
 state 125
-	Exp : Exp . AND Exp  (43)
-	Exp : Exp AND Exp .  (43)
-	Exp : Exp . '<' Exp  (44)
-	Exp : Exp . '+' Exp  (45)
-	Exp : Exp . '-' Exp  (46)
-	Exp : Exp . '*' Exp  (47)
-	Exp : Exp . '/' Exp  (48)
-	Exp : Exp . '.' Identifier '(' RealParamList ')'  (49)
+	Statement : IF '(' Exp ')' . Statement ELSE Statement  (39)
 
-	'+'  shift 106
-	'-'  shift 107
-	'*'  shift 108
-	'/'  shift 109
-	'.'  shift 110
-	AND  reduce 43
-	'<'  reduce 43
-	')'  reduce 43
-	';'  reduce 43
-	','  reduce 43
+	IF  shift 62
+	WHILE  shift 63
+	SOUT  shift 64
+	Identifier  shift 65
+	'{'  shift 66
+	.  error
+
+	Statement  goto 146
 
 
 state 126
-	Exp : Exp . AND Exp  (43)
-	Exp : Exp . '<' Exp  (44)
-	Exp : Exp '<' Exp .  (44)
-	Exp : Exp . '+' Exp  (45)
-	Exp : Exp . '-' Exp  (46)
-	Exp : Exp . '*' Exp  (47)
-	Exp : Exp . '/' Exp  (48)
-	Exp : Exp . '.' Identifier '(' RealParamList ')'  (49)
+	Statement : WHILE '(' Exp ')' . Statement  (40)
 
-	AND  shift 104
-	'+'  shift 106
-	'-'  shift 107
-	'*'  shift 108
-	'/'  shift 109
-	'.'  shift 110
-	')'  reduce 44
-	';'  reduce 44
-	','  reduce 44
+	IF  shift 62
+	WHILE  shift 63
+	SOUT  shift 64
+	Identifier  shift 65
+	'{'  shift 66
+	.  error
+
+	Statement  goto 147
 
 
 state 127
-	Exp : Exp . AND Exp  (43)
-	Exp : Exp . '<' Exp  (44)
-	Exp : Exp . '+' Exp  (45)
-	Exp : Exp '+' Exp .  (45)
-	Exp : Exp . '-' Exp  (46)
-	Exp : Exp . '*' Exp  (47)
-	Exp : Exp . '/' Exp  (48)
-	Exp : Exp . '.' Identifier '(' RealParamList ')'  (49)
+	Statement : SOUT '(' Exp ')' . ';'  (41)
 
-	'*'  shift 108
-	'/'  shift 109
-	'.'  shift 110
+	';'  shift 148
+	.  error
+
+
+state 128
+	Statement : Identifier '=' Exp ';' .  (42)
+
+	.  reduce 42
+
+
+state 129
+	ParamListAux : ',' Type Identifier $$9 ParamListAux .  (32)
+
+	.  reduce 32
+
+
+state 130
+	Exp : NEW Identifier '(' . ')'  (57)
+
+	')'  shift 149
+	.  error
+
+
+state 131
+	Exp : '(' Exp ')' .  (59)
+
+	.  reduce 59
+
+
+state 132
+	Exp : Exp . AND Exp  (45)
+	Exp : Exp AND Exp .  (45)
+	Exp : Exp . '<' Exp  (46)
+	Exp : Exp . '+' Exp  (47)
+	Exp : Exp . '-' Exp  (48)
+	Exp : Exp . '*' Exp  (49)
+	Exp : Exp . '/' Exp  (50)
+	Exp : Exp . '.' Identifier '(' RealParamList ')'  (51)
+
+	'+'  shift 113
+	'-'  shift 114
+	'*'  shift 115
+	'/'  shift 116
+	'.'  shift 117
 	AND  reduce 45
 	'<'  reduce 45
-	'+'  reduce 45
-	'-'  reduce 45
 	')'  reduce 45
 	';'  reduce 45
 	','  reduce 45
 
 
-state 128
-	Exp : Exp . AND Exp  (43)
-	Exp : Exp . '<' Exp  (44)
-	Exp : Exp . '+' Exp  (45)
-	Exp : Exp . '-' Exp  (46)
-	Exp : Exp '-' Exp .  (46)
-	Exp : Exp . '*' Exp  (47)
-	Exp : Exp . '/' Exp  (48)
-	Exp : Exp . '.' Identifier '(' RealParamList ')'  (49)
+state 133
+	Exp : Exp . AND Exp  (45)
+	Exp : Exp . '<' Exp  (46)
+	Exp : Exp '<' Exp .  (46)
+	Exp : Exp . '+' Exp  (47)
+	Exp : Exp . '-' Exp  (48)
+	Exp : Exp . '*' Exp  (49)
+	Exp : Exp . '/' Exp  (50)
+	Exp : Exp . '.' Identifier '(' RealParamList ')'  (51)
 
-	'*'  shift 108
-	'/'  shift 109
-	'.'  shift 110
-	AND  reduce 46
-	'<'  reduce 46
-	'+'  reduce 46
-	'-'  reduce 46
+	AND  shift 111
+	'+'  shift 113
+	'-'  shift 114
+	'*'  shift 115
+	'/'  shift 116
+	'.'  shift 117
 	')'  reduce 46
 	';'  reduce 46
 	','  reduce 46
 
 
-state 129
-	Exp : Exp . AND Exp  (43)
-	Exp : Exp . '<' Exp  (44)
-	Exp : Exp . '+' Exp  (45)
-	Exp : Exp . '-' Exp  (46)
-	Exp : Exp . '*' Exp  (47)
-	Exp : Exp '*' Exp .  (47)
-	Exp : Exp . '/' Exp  (48)
-	Exp : Exp . '.' Identifier '(' RealParamList ')'  (49)
+state 134
+	Exp : Exp . AND Exp  (45)
+	Exp : Exp . '<' Exp  (46)
+	Exp : Exp . '+' Exp  (47)
+	Exp : Exp '+' Exp .  (47)
+	Exp : Exp . '-' Exp  (48)
+	Exp : Exp . '*' Exp  (49)
+	Exp : Exp . '/' Exp  (50)
+	Exp : Exp . '.' Identifier '(' RealParamList ')'  (51)
 
-	'.'  shift 110
+	'*'  shift 115
+	'/'  shift 116
+	'.'  shift 117
 	AND  reduce 47
 	'<'  reduce 47
 	'+'  reduce 47
 	'-'  reduce 47
-	'*'  reduce 47
-	'/'  reduce 47
 	')'  reduce 47
 	';'  reduce 47
 	','  reduce 47
 
 
-state 130
-	Exp : Exp . AND Exp  (43)
-	Exp : Exp . '<' Exp  (44)
-	Exp : Exp . '+' Exp  (45)
-	Exp : Exp . '-' Exp  (46)
-	Exp : Exp . '*' Exp  (47)
-	Exp : Exp . '/' Exp  (48)
-	Exp : Exp '/' Exp .  (48)
-	Exp : Exp . '.' Identifier '(' RealParamList ')'  (49)
+state 135
+	Exp : Exp . AND Exp  (45)
+	Exp : Exp . '<' Exp  (46)
+	Exp : Exp . '+' Exp  (47)
+	Exp : Exp . '-' Exp  (48)
+	Exp : Exp '-' Exp .  (48)
+	Exp : Exp . '*' Exp  (49)
+	Exp : Exp . '/' Exp  (50)
+	Exp : Exp . '.' Identifier '(' RealParamList ')'  (51)
 
-	'.'  shift 110
+	'*'  shift 115
+	'/'  shift 116
+	'.'  shift 117
 	AND  reduce 48
 	'<'  reduce 48
 	'+'  reduce 48
 	'-'  reduce 48
-	'*'  reduce 48
-	'/'  reduce 48
 	')'  reduce 48
 	';'  reduce 48
 	','  reduce 48
 
 
-state 131
-	Exp : Exp '.' Identifier . '(' RealParamList ')'  (49)
-
-	'('  shift 143
-	.  error
-
-
-state 132
-	DeclOrStatList : IF '(' Exp ')' Statement . ELSE Statement StatementList  (22)
-
-	ELSE  shift 144
-	.  error
-
-
-state 133
-	DeclOrStatList : WHILE '(' Exp ')' Statement . StatementList  (23)
-	StatementList : .  (42)
-
-	.  reduce 42
-
-	StatementList  goto 145
-
-
-state 134
-	DeclOrStatList : SOUT '(' Exp ')' ';' . StatementList  (24)
-	StatementList : .  (42)
-
-	.  reduce 42
-
-	StatementList  goto 146
-
-
-state 135
-	DeclOrStatList : Identifier Identifier ';' $$4 DeclOrStatList .  (16)
-
-	.  reduce 16
-
-
 state 136
-	DeclOrStatList : Identifier '=' Exp ';' $$6 . StatementList  (20)
-	StatementList : .  (42)
+	Exp : Exp . AND Exp  (45)
+	Exp : Exp . '<' Exp  (46)
+	Exp : Exp . '+' Exp  (47)
+	Exp : Exp . '-' Exp  (48)
+	Exp : Exp . '*' Exp  (49)
+	Exp : Exp '*' Exp .  (49)
+	Exp : Exp . '/' Exp  (50)
+	Exp : Exp . '.' Identifier '(' RealParamList ')'  (51)
 
-	.  reduce 42
-
-	StatementList  goto 147
+	'.'  shift 117
+	AND  reduce 49
+	'<'  reduce 49
+	'+'  reduce 49
+	'-'  reduce 49
+	'*'  reduce 49
+	'/'  reduce 49
+	')'  reduce 49
+	';'  reduce 49
+	','  reduce 49
 
 
 state 137
-	DeclOrStatList : BaseType Identifier ';' $$5 DeclOrStatList .  (18)
+	Exp : Exp . AND Exp  (45)
+	Exp : Exp . '<' Exp  (46)
+	Exp : Exp . '+' Exp  (47)
+	Exp : Exp . '-' Exp  (48)
+	Exp : Exp . '*' Exp  (49)
+	Exp : Exp . '/' Exp  (50)
+	Exp : Exp '/' Exp .  (50)
+	Exp : Exp . '.' Identifier '(' RealParamList ')'  (51)
 
-	.  reduce 18
+	'.'  shift 117
+	AND  reduce 50
+	'<'  reduce 50
+	'+'  reduce 50
+	'-'  reduce 50
+	'*'  reduce 50
+	'/'  reduce 50
+	')'  reduce 50
+	';'  reduce 50
+	','  reduce 50
 
 
 state 138
-	MethodDeclaration : PUBLIC Type Identifier $$3 '(' ParamList ')' '{' DeclOrStatList RETURN Exp ';' '}' .  (11)
+	Exp : Exp '.' Identifier . '(' RealParamList ')'  (51)
 
-	.  reduce 11
+	'('  shift 150
+	.  error
 
 
 state 139
-	Statement : IF '(' Exp ')' Statement . ELSE Statement  (37)
+	DeclOrStatList : IF '(' Exp ')' Statement . ELSE Statement StatementList  (24)
 
-	ELSE  shift 148
+	ELSE  shift 151
 	.  error
 
 
 state 140
-	Statement : WHILE '(' Exp ')' Statement .  (38)
+	DeclOrStatList : WHILE '(' Exp ')' Statement . StatementList  (25)
+	StatementList : .  (44)
 
-	.  reduce 38
+	.  reduce 44
+
+	StatementList  goto 152
 
 
 state 141
-	Statement : SOUT '(' Exp ')' ';' .  (39)
+	DeclOrStatList : SOUT '(' Exp ')' ';' . StatementList  (26)
+	StatementList : .  (44)
+
+	.  reduce 44
+
+	StatementList  goto 153
+
+
+state 142
+	DeclOrStatList : Identifier Identifier ';' $$5 DeclOrStatList .  (18)
+
+	.  reduce 18
+
+
+state 143
+	DeclOrStatList : Identifier '=' Exp ';' $$7 . StatementList  (22)
+	StatementList : .  (44)
+
+	.  reduce 44
+
+	StatementList  goto 154
+
+
+state 144
+	DeclOrStatList : BaseType Identifier ';' $$6 DeclOrStatList .  (20)
+
+	.  reduce 20
+
+
+state 145
+	MethodDeclaration : PUBLIC Type Identifier $$4 '(' ParamList ')' '{' DeclOrStatList RETURN Exp ';' '}' .  (13)
+
+	.  reduce 13
+
+
+state 146
+	Statement : IF '(' Exp ')' Statement . ELSE Statement  (39)
+
+	ELSE  shift 155
+	.  error
+
+
+state 147
+	Statement : WHILE '(' Exp ')' Statement .  (40)
+
+	.  reduce 40
+
+
+state 148
+	Statement : SOUT '(' Exp ')' ';' .  (41)
+
+	.  reduce 41
+
+
+state 149
+	Exp : NEW Identifier '(' ')' .  (57)
+
+	.  reduce 57
+
+
+state 150
+	Exp : Exp '.' Identifier '(' . RealParamList ')'  (51)
+	RealParamList : .  (61)
+
+	NEW  shift 84
+	TRUE  shift 85
+	FALSE  shift 86
+	THIS  shift 87
+	Identifier  shift 88
+	Number  shift 89
+	'!'  shift 90
+	'('  shift 91
+	')'  reduce 61
+
+	Exp  goto 156
+	RealParamList  goto 157
+
+
+state 151
+	DeclOrStatList : IF '(' Exp ')' Statement ELSE . Statement StatementList  (24)
+
+	IF  shift 62
+	WHILE  shift 63
+	SOUT  shift 64
+	Identifier  shift 65
+	'{'  shift 66
+	.  error
+
+	Statement  goto 158
+
+
+state 152
+	DeclOrStatList : WHILE '(' Exp ')' Statement StatementList .  (25)
+	StatementList : StatementList . Statement  (43)
+
+	IF  shift 62
+	WHILE  shift 63
+	SOUT  shift 64
+	Identifier  shift 65
+	'{'  shift 66
+	RETURN  reduce 25
+
+	Statement  goto 98
+
+
+state 153
+	DeclOrStatList : SOUT '(' Exp ')' ';' StatementList .  (26)
+	StatementList : StatementList . Statement  (43)
+
+	IF  shift 62
+	WHILE  shift 63
+	SOUT  shift 64
+	Identifier  shift 65
+	'{'  shift 66
+	RETURN  reduce 26
+
+	Statement  goto 98
+
+
+state 154
+	DeclOrStatList : Identifier '=' Exp ';' $$7 StatementList .  (22)
+	StatementList : StatementList . Statement  (43)
+
+	IF  shift 62
+	WHILE  shift 63
+	SOUT  shift 64
+	Identifier  shift 65
+	'{'  shift 66
+	RETURN  reduce 22
+
+	Statement  goto 98
+
+
+state 155
+	Statement : IF '(' Exp ')' Statement ELSE . Statement  (39)
+
+	IF  shift 62
+	WHILE  shift 63
+	SOUT  shift 64
+	Identifier  shift 65
+	'{'  shift 66
+	.  error
+
+	Statement  goto 159
+
+
+state 156
+	Exp : Exp . AND Exp  (45)
+	Exp : Exp . '<' Exp  (46)
+	Exp : Exp . '+' Exp  (47)
+	Exp : Exp . '-' Exp  (48)
+	Exp : Exp . '*' Exp  (49)
+	Exp : Exp . '/' Exp  (50)
+	Exp : Exp . '.' Identifier '(' RealParamList ')'  (51)
+	RealParamList : Exp . RealParamListAux  (60)
+	RealParamListAux : .  (63)
+
+	AND  shift 111
+	'<'  shift 112
+	'+'  shift 113
+	'-'  shift 114
+	'*'  shift 115
+	'/'  shift 116
+	'.'  shift 117
+	','  shift 160
+	')'  reduce 63
+
+	RealParamListAux  goto 161
+
+
+state 157
+	Exp : Exp '.' Identifier '(' RealParamList . ')'  (51)
+
+	')'  shift 162
+	.  error
+
+
+state 158
+	DeclOrStatList : IF '(' Exp ')' Statement ELSE Statement . StatementList  (24)
+	StatementList : .  (44)
+
+	.  reduce 44
+
+	StatementList  goto 163
+
+
+state 159
+	Statement : IF '(' Exp ')' Statement ELSE Statement .  (39)
 
 	.  reduce 39
 
 
-state 142
-	Exp : NEW Identifier '(' ')' .  (55)
+state 160
+	RealParamListAux : ',' . Exp RealParamListAux  (62)
 
-	.  reduce 55
-
-
-state 143
-	Exp : Exp '.' Identifier '(' . RealParamList ')'  (49)
-	RealParamList : .  (59)
-
-	NEW  shift 77
-	TRUE  shift 78
-	FALSE  shift 79
-	THIS  shift 80
-	Identifier  shift 81
-	Number  shift 82
-	'!'  shift 83
-	'('  shift 84
-	')'  reduce 59
-
-	Exp  goto 149
-	RealParamList  goto 150
-
-
-state 144
-	DeclOrStatList : IF '(' Exp ')' Statement ELSE . Statement StatementList  (22)
-
-	IF  shift 55
-	WHILE  shift 56
-	SOUT  shift 57
-	Identifier  shift 58
-	'{'  shift 59
+	NEW  shift 84
+	TRUE  shift 85
+	FALSE  shift 86
+	THIS  shift 87
+	Identifier  shift 88
+	Number  shift 89
+	'!'  shift 90
+	'('  shift 91
 	.  error
 
-	Statement  goto 151
+	Exp  goto 164
 
 
-state 145
-	DeclOrStatList : WHILE '(' Exp ')' Statement StatementList .  (23)
-	StatementList : StatementList . Statement  (41)
-
-	IF  shift 55
-	WHILE  shift 56
-	SOUT  shift 57
-	Identifier  shift 58
-	'{'  shift 59
-	RETURN  reduce 23
-
-	Statement  goto 91
-
-
-state 146
-	DeclOrStatList : SOUT '(' Exp ')' ';' StatementList .  (24)
-	StatementList : StatementList . Statement  (41)
-
-	IF  shift 55
-	WHILE  shift 56
-	SOUT  shift 57
-	Identifier  shift 58
-	'{'  shift 59
-	RETURN  reduce 24
-
-	Statement  goto 91
-
-
-state 147
-	DeclOrStatList : Identifier '=' Exp ';' $$6 StatementList .  (20)
-	StatementList : StatementList . Statement  (41)
-
-	IF  shift 55
-	WHILE  shift 56
-	SOUT  shift 57
-	Identifier  shift 58
-	'{'  shift 59
-	RETURN  reduce 20
-
-	Statement  goto 91
-
-
-state 148
-	Statement : IF '(' Exp ')' Statement ELSE . Statement  (37)
-
-	IF  shift 55
-	WHILE  shift 56
-	SOUT  shift 57
-	Identifier  shift 58
-	'{'  shift 59
-	.  error
-
-	Statement  goto 152
-
-
-state 149
-	Exp : Exp . AND Exp  (43)
-	Exp : Exp . '<' Exp  (44)
-	Exp : Exp . '+' Exp  (45)
-	Exp : Exp . '-' Exp  (46)
-	Exp : Exp . '*' Exp  (47)
-	Exp : Exp . '/' Exp  (48)
-	Exp : Exp . '.' Identifier '(' RealParamList ')'  (49)
-	RealParamList : Exp . RealParamListAux  (58)
-	RealParamListAux : .  (61)
-
-	AND  shift 104
-	'<'  shift 105
-	'+'  shift 106
-	'-'  shift 107
-	'*'  shift 108
-	'/'  shift 109
-	'.'  shift 110
-	','  shift 153
-	')'  reduce 61
-
-	RealParamListAux  goto 154
-
-
-state 150
-	Exp : Exp '.' Identifier '(' RealParamList . ')'  (49)
-
-	')'  shift 155
-	.  error
-
-
-state 151
-	DeclOrStatList : IF '(' Exp ')' Statement ELSE Statement . StatementList  (22)
-	StatementList : .  (42)
-
-	.  reduce 42
-
-	StatementList  goto 156
-
-
-state 152
-	Statement : IF '(' Exp ')' Statement ELSE Statement .  (37)
-
-	.  reduce 37
-
-
-state 153
-	RealParamListAux : ',' . Exp RealParamListAux  (60)
-
-	NEW  shift 77
-	TRUE  shift 78
-	FALSE  shift 79
-	THIS  shift 80
-	Identifier  shift 81
-	Number  shift 82
-	'!'  shift 83
-	'('  shift 84
-	.  error
-
-	Exp  goto 157
-
-
-state 154
-	RealParamList : Exp RealParamListAux .  (58)
-
-	.  reduce 58
-
-
-state 155
-	Exp : Exp '.' Identifier '(' RealParamList ')' .  (49)
-
-	.  reduce 49
-
-
-state 156
-	DeclOrStatList : IF '(' Exp ')' Statement ELSE Statement StatementList .  (22)
-	StatementList : StatementList . Statement  (41)
-
-	IF  shift 55
-	WHILE  shift 56
-	SOUT  shift 57
-	Identifier  shift 58
-	'{'  shift 59
-	RETURN  reduce 22
-
-	Statement  goto 91
-
-
-state 157
-	Exp : Exp . AND Exp  (43)
-	Exp : Exp . '<' Exp  (44)
-	Exp : Exp . '+' Exp  (45)
-	Exp : Exp . '-' Exp  (46)
-	Exp : Exp . '*' Exp  (47)
-	Exp : Exp . '/' Exp  (48)
-	Exp : Exp . '.' Identifier '(' RealParamList ')'  (49)
-	RealParamListAux : ',' Exp . RealParamListAux  (60)
-	RealParamListAux : .  (61)
-
-	AND  shift 104
-	'<'  shift 105
-	'+'  shift 106
-	'-'  shift 107
-	'*'  shift 108
-	'/'  shift 109
-	'.'  shift 110
-	','  shift 153
-	')'  reduce 61
-
-	RealParamListAux  goto 158
-
-
-state 158
-	RealParamListAux : ',' Exp RealParamListAux .  (60)
+state 161
+	RealParamList : Exp RealParamListAux .  (60)
 
 	.  reduce 60
 
 
-42 terminals, 27 nonterminals
-62 grammar rules, 159 states
+state 162
+	Exp : Exp '.' Identifier '(' RealParamList ')' .  (51)
+
+	.  reduce 51
+
+
+state 163
+	DeclOrStatList : IF '(' Exp ')' Statement ELSE Statement StatementList .  (24)
+	StatementList : StatementList . Statement  (43)
+
+	IF  shift 62
+	WHILE  shift 63
+	SOUT  shift 64
+	Identifier  shift 65
+	'{'  shift 66
+	RETURN  reduce 24
+
+	Statement  goto 98
+
+
+state 164
+	Exp : Exp . AND Exp  (45)
+	Exp : Exp . '<' Exp  (46)
+	Exp : Exp . '+' Exp  (47)
+	Exp : Exp . '-' Exp  (48)
+	Exp : Exp . '*' Exp  (49)
+	Exp : Exp . '/' Exp  (50)
+	Exp : Exp . '.' Identifier '(' RealParamList ')'  (51)
+	RealParamListAux : ',' Exp . RealParamListAux  (62)
+	RealParamListAux : .  (63)
+
+	AND  shift 111
+	'<'  shift 112
+	'+'  shift 113
+	'-'  shift 114
+	'*'  shift 115
+	'/'  shift 116
+	'.'  shift 117
+	','  shift 160
+	')'  reduce 63
+
+	RealParamListAux  goto 165
+
+
+state 165
+	RealParamListAux : ',' Exp RealParamListAux .  (62)
+
+	.  reduce 62
+
+
+43 terminals, 28 nonterminals
+64 grammar rules, 166 states

@@ -1,0 +1,19 @@
+class Bateria {
+    public int medirCarga() {
+        int voltagem;
+        boolean descarregada;
+        
+        voltagem = 12;
+        descarregada = false;
+        
+        voltagem = descarregada; // ERRO ESPERADO: Atribuindo boolean em int
+        
+        return voltagem;
+    }
+}
+
+class App {
+    public static void main(String[] args) {
+        System.out.println(new Bateria().medirCarga());
+    }
+}
