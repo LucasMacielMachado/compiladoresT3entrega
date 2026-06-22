@@ -8,7 +8,7 @@ class Oficina {
     }
 
     public int consertar() {
-        chave = 12; // ERRO ESPERADO: Tentativa de acessar variavel local de outro metodo
+        chave = 12; // acesso variave local de outro metodo
         return ferramentas;
     }
 }

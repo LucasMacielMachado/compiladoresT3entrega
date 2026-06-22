@@ -6,7 +6,7 @@ class Bateria {
         voltagem = 12;
         descarregada = false;
         
-        voltagem = descarregada; // ERRO ESPERADO: Atribuindo boolean em int
+        voltagem = descarregada; // atribuicao com tipo errado
         
         return voltagem;
     }

@@ -15,7 +15,7 @@ class Mecanico {
         Motor m;
         int servico;
         m = new EA111();
-        servico = m.trocarValvulaAntiChama(); // ERRO ESPERADO: A classe Motor (superclasse) nao possui este metodo
+        servico = m.trocarValvulaAntiChama(); // super classe nao possui esse metodo
         return servico;
     }
 }

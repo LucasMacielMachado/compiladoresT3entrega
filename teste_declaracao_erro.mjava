@@ -1,7 +1,7 @@
 class Manutencao {
     public int trocarFiltro() {
         int status;
-        status = this.drenarOleo(); // ERRO ESPERADO: Metodo drenarOleo ainda nao existe na Tabela de Simbolos
+        status = this.drenarOleo(); //  drenar oleo ainda nao esta especificado
         return status;
     }
 
