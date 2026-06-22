@@ -1,0 +1,25 @@
+class TesteEscopo {
+    int globalVar;
+
+    public int metodoUm() {
+        int varLocal;
+        varLocal = 5;
+        globalVar = varLocal;
+        return varLocal;
+    }
+
+    public int metodoDois() {
+        globalVar = 10;
+        varLocal = 20; 
+        return globalVar;
+    }
+}
+
+class App {
+    public static void main(String[] args) {
+        {
+            TesteEscopo t;
+            t = new TesteEscopo();
+        }
+    }
+}

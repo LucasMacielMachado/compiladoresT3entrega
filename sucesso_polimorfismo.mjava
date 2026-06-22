@@ -1,0 +1,23 @@
+class Animal {
+    public int fazerBarulho() {
+        return 1;
+    }
+}
+
+class Cachorro extends Animal {
+    public int abanarRabo() {
+        return 2;
+    }
+}
+
+class App {
+    public static void main(String[] args) {
+        {
+            Animal a;
+            int x;
+            a = new Cachorro();
+            x = a.fazerBarulho();
+            System.out.println(x);
+        }
+    }
+}

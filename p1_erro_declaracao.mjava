@@ -1,0 +1,20 @@
+class TesteOrdem {
+    public int executaAntes() {
+        int temp;
+        temp = this.executaDepois(); 
+        return temp;
+    }
+
+    public int executaDepois() {
+        return 100;
+    }
+}
+
+class App {
+    public static void main(String[] args) {
+        {
+            int x;
+            x = 0;
+        }
+    }
+}
