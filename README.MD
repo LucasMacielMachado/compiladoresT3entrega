@@ -1,20 +1,25 @@
-# Tarefa 3 - Análise Semântica (MiniJava)
+# Análise Semântica (MiniJava)
 
-Implementação da análise semântica da linguagem MiniJava em uma única passagem. Arrays ficaram de fora conforme as simplificações do trabalho.
+Este repositório contém uma implementação de análise semântica para a linguagem MiniJava, feita em uma única passada. Para simplificar, suporte a arrays foi omitido conforme o enunciado do trabalho.
 
-A Tabela de Símbolos usa um ArrayList básico de `TS_entry`. O controle de escopo é feito concatenando o caminho numa string (ex: `Oficina.organizar.qtd`). Pro polimorfismo dar certo, o `TS_entry` tem um ponteiro pra classe pai, permitindo que o parser suba na hierarquia pra achar métodos herdados que não estão no escopo local.
+Como funciona (visão geral):
+- A Tabela de Símbolos é implementada como um `ArrayList` de `TS_entry`.
+- O controle de escopo é realizado concatenando o caminho dos identificadores em uma string (ex.: `Oficina.organizar.qtd`).
+- Para suportar polimorfismo, cada `TS_entry` pode apontar para a classe pai, permitindo que o analisador suba na hierarquia e encontre métodos herdados que não estão no escopo local.
 
-O analisador valida:
-- Uso de identificadores não declarados e redeclaração no mesmo escopo
-- Vazamento de variáveis locais entre métodos
-- Tipagem estrita nas atribuições (barrando boolean em int, por exemplo)
-- Operações matemáticas restritas a int e IF/WHILE restritos a boolean
-- SOUT travado para imprimir apenas inteiros
-- Subtipos e herança nas atribuições e chamadas de método
+O analisador valida os principais aspectos semânticos, por exemplo:
+- Identificadores não declarados e redeclarações no mesmo escopo.
+- Vazamento de variáveis locais entre métodos.
+- Tipagem estrita em atribuições (por exemplo, impedir atribuir `boolean` a `int`).
+- Operações aritméticas apenas com `int`; condições de `if`/`while` apenas com `boolean`.
+- `System.out.println` (SOUT) limitado para imprimir inteiros conforme as regras do trabalho.
+- Subtipos e herança em atribuições e chamadas de método.
 
-Foram feitos 8 testes `.mjava` com tema de manutenção automotiva. São 4 pares (um de sucesso e um forçando o erro semântico) pra testar todos os cenários de escopo, tipos, ordem de declaração e polimorfismo.
+Testes
+- Foram adicionados 8 arquivos de teste `.mjava`  4 casos de sucesso e 4 casos que forçam erros semânticos.  
+Como compilar e rodar os testes utilizando o Makefile 
 
-Pra compilar o JFlex/Byaccj e rodar todos os testes em sequência:
-
+```sh
 make clean
 make test
+```
